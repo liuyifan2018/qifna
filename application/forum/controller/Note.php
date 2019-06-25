@@ -11,6 +11,9 @@ use think\Controller;
 use think\facade\Request;
 
 class Note extends Controller {
+	/**
+	 * 帖子操作控制器
+	 */
 
 	/**
 	 * @var $model
@@ -68,6 +71,9 @@ class Note extends Controller {
 		}
 	}
 
+	/**
+	 * @return mixed|\think\response\View
+	 */
 	public function addNote( ){
 		try{
 			$this->model = $this->model();
@@ -78,6 +84,14 @@ class Note extends Controller {
 			return view('addNote');
 		}catch (\Exception $e){
 			return json_decode( $e->getMessage(),true);
+		}
+	}
+
+	public function editNote(){
+		try{
+			$this->model = $this->model();
+		}catch (\Exception $e){
+
 		}
 	}
 

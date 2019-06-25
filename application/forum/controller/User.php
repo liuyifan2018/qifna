@@ -37,7 +37,7 @@ class User extends Controller {
 	 * @return mixed
 	 */
 	public function model(){
-		return $this->model;
+		return new UserModel();
 	}
 
 	/**
@@ -105,7 +105,8 @@ class User extends Controller {
 			}
 			if(Request::isPost()){
 				$data = input('post.');
-				$this->model->login( $data );
+				$msg = $this->model->login( $data );
+				return json($msg);  //fetch请求需要返回json数组,catch出去的异常信息接收不到
 			}
 			$username = input('get.username');//注册后会带上参数跳到这个页面
 			return view('login',[
@@ -115,7 +116,7 @@ class User extends Controller {
 				'inPass'    =>  $inPass
 			]);
 		}catch (\Exception $e){
-			return json_encode( $e->getMessage() ,true);
+			return json_decode( $e->getMessage() ,true);
 		}
 	}
 

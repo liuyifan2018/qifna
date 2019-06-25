@@ -22,6 +22,7 @@ class UserModel extends Model implements UserFace {
 
 	/**
 	 * @param $data
+	 * @return mixed|string
 	 * @throws \Exception
 	 * 登录
 	 */
@@ -57,12 +58,15 @@ class UserModel extends Model implements UserFace {
 		if(empty($userInfo)) throw new \Exception('{"code":"0","msg":"账号不存在!"}');
 		if($userInfo['password'] != $userInfo['password']) {
 			Db::table('log')->data($msg)->insert(['log' => '密码错误']);
-			throw new \Exception('{"code":"0","msg":"密码错误!"}');
+			throw new \Exception('{"code":"0" , "msg":"密码错误!"}');
 		}
 		if($log >= 5) throw new \Exception('{"code":"0","msg":"发现异常登录,已无法登录!"}');
 		Session::set('data',$userInfo);
 		Db::table('log')->data($msg)->insert(['log' => '密码正确']);
 		Db::table('user')->where(['username' => $data['username']])->update(['state' => '在线']);
+		$info['code'] = 0;
+		$info['msg'] = "登录成功!";
+		return $info;
 		throw new \Exception('{"code":"1" , "msg":"登录成功!"}');
 	}
 
