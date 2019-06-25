@@ -28,18 +28,18 @@ function login(){
         })
         .then((res) => {
             let resData = res;   //第二次的then的时候就可以得到这个对象了
-            switch (resData.code) {
-                case 1:
-                    layer.open({
-                        title:'提示信息',
-                        content:resData.msg(),
-                        yes:function(index){
-                            layer.close(index);
-                        }
-                    }, setTimeout(function(){
-                        layer.close();
-                    }));break;
-                default:window.location.href = '../Index/index';break;
+            if(resData.code == 0){
+                layer.open({
+                    title:'提示信息',
+                    content:resData.msg(),
+                    yes:function(index){
+                        layer.close(index);
+                    }
+                }, setTimeout(function(){
+                    layer.close();
+                },3000))
+            }else{
+                window.location.href = '../Index/index';
             }
         })
         .catch((error) => {

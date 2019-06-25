@@ -8,6 +8,7 @@
 namespace app\forum\model;
 use app\forum\Interfaces\UserFace;
 use app\forum\Traits\Date;
+use app\forum\Traits\OutMsg;
 use think\Db;
 use think\Model;
 use think\facade\Session;
@@ -39,7 +40,7 @@ class UserModel extends Model implements UserFace {
 		$arr = ['username','password'];
 		for ($i = 0; $i < count($arr); $i++){
 			if ($data[$arr[$i]] == ""){
-				throw new \Exception('{"code":"0","msg":"必填空不能为空!"}');
+				return OutMsg::outErrorMsg("必填空不能为空!");
 			}
 		}
 		$msg = [
@@ -55,19 +56,19 @@ class UserModel extends Model implements UserFace {
 		//	    if(Session::get('captcha') != $data['checkNum']){
 		//		    throw new \Exception('{"code":"0" , "msg":"验证码不正确!"}');
 		//	    }
-		if(empty($userInfo)) throw new \Exception('{"code":"0","msg":"账号不存在!"}');
-		if($userInfo['password'] != $userInfo['password']) {
+		if(empty($userInfo)) return OutMsg::outErrorMsg("账号不存在");
+		if($data['password'] != $userInfo['password']) {
 			Db::table('log')->data($msg)->insert(['log' => '密码错误']);
-			throw new \Exception('{"code":"0" , "msg":"密码错误!"}');
+			$info['code'] = 0;$info['msg'] = "密码错误!";
+			return $info;
+		}elseif($log >= 5) {
+			return OutMsg::outErrorMsg("发现异常登录,已无法登录!");
+		}else{
+			Session::set('data',$userInfo);
+			Db::table('log')->data($msg)->insert(['log' => '密码正确']);
+			Db::table('user')->where(['username' => $data['username']])->update(['state' => '在线']);
+			return OutMsg::outSuccessMsg("登录成功");
 		}
-		if($log >= 5) throw new \Exception('{"code":"0","msg":"发现异常登录,已无法登录!"}');
-		Session::set('data',$userInfo);
-		Db::table('log')->data($msg)->insert(['log' => '密码正确']);
-		Db::table('user')->where(['username' => $data['username']])->update(['state' => '在线']);
-		$info['code'] = 0;
-		$info['msg'] = "登录成功!";
-		return $info;
-		throw new \Exception('{"code":"1" , "msg":"登录成功!"}');
 	}
 
 	/**
@@ -82,11 +83,10 @@ class UserModel extends Model implements UserFace {
 			throw new \Exception('{"code":"0" , "msg":"邮箱格式错误!"}');
 		}else{
 			$insert = Db::table('user')->strict(false)->insert($data);
-			if($insert){
-				throw new \Exception('{"code":"1" , "msg":"注册成功!"}');
-			}else{
-				throw new \Exception('{"code":"0" , "msg":"注册失败!"}');
+			if($insert === false){
+				return OutMsg::outErrorMsg('注册失败!');
 			}
+			return OutMsg::outSuccessMsg('注册成功!');
 		}
 	}
 
