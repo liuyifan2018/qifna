@@ -7,6 +7,7 @@
  */
 namespace app\forum\controller;
 use app\forum\model\UserModel;
+use app\forum\Traits\OutMsg;
 use think\Controller;
 use think\facade\Request;
 use think\Db;
@@ -88,7 +89,8 @@ class User extends Controller {
 		imagedestroy($image);
 	}
 	/**
-	 * @return false|mixed|string|\think\response\View
+	 * @return \think\response\Json|\think\response\View
+	 * @throws \Exception
 	 * 登录
 	 */
 	public function login(){
@@ -116,7 +118,7 @@ class User extends Controller {
 				'inPass'    =>  $inPass
 			]);
 		}catch (\Exception $e){
-			return json_decode( $e->getMessage() ,true);
+			return OutMsg::outAbnormalMsg($e->getMessage());
 		}
 	}
 

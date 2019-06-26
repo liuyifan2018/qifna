@@ -1,17 +1,9 @@
-
-<!DOCTYPE html>
-<html>
-<head lang="en">
-	<meta charset="UTF-8">
+{include file="../application/forum/view/public.html"/}
 	<title>论坛首页</title>
-	<link rel="stylesheet" href="css/reset.css"/>
-	<link rel="stylesheet" href="css/public.css"/>
-	<link rel="stylesheet" href="css/index.css"/>
 </head>
 <body>
 <header class="ltHead">
 	<div class="ltHead_cen">
-		<a href=""><img src="img/logo.png" alt="" class="headPic1"/></a>
 		<ul class="headNav">
 			<li><a href="">首页</a></li>
 			<li><a href="">沪牌竞拍</a></li>
@@ -24,7 +16,6 @@
 		</ul>
 		<!--未登入开始-->
 		<div class="ltForm appear">
-			<a href=""><img src="img/indexForm_bg.png" alt="" class="headPic2"/></a>
 			<ul>
 				<li><a href="">登入</a></li>
 				<li><a href="">注册</a></li>
@@ -320,23 +311,3 @@
 </footer>
 </body>
 </html>
-<script src="js/jquery-1.8.3.min.js"></script>
-<script>
-    $(".indexMain_left_btn li a").click(function(){
-        $(".indexMain_left_btn li a").removeClass("on");
-        $(this).addClass("on");
-    });
-    window.onscroll=function(){
-        var scrolls=document.body.scrollTop||document.documentElement.scrollTop;
-        var slided=60;
-        if(scrolls>=slided){
-            $(".appear").hide();
-            $(".navFix").show();
-            $(".ltHead").addClass("navTop");
-        }else{
-            $(".appear").show();
-            $(".navFix").hide();
-            $(".ltHead").removeClass("navTop");
-        }
-    };
-</script>

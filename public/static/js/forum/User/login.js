@@ -29,21 +29,13 @@ function login(){
         .then((res) => {
             let resData = res;   //第二次的then的时候就可以得到这个对象了
             if(resData.code == 0){
-                layer.open({
-                    title:'提示信息',
-                    content:resData.msg(),
-                    yes:function(index){
-                        layer.close(index);
-                    }
-                }, setTimeout(function(){
-                    layer.close();
-                },3000))
+                layer.msg(resData.msg,{icon:5});
             }else{
                 window.location.href = '../Index/index';
             }
         })
-        .catch((error) => {
-            layer.msg(error,{icon:5});  //请求错误
+        .catch(error =>{
+            layer.msg(error + "请稍后重试",{icon:2});
         });
 }
 document.onkeydown = function(e){

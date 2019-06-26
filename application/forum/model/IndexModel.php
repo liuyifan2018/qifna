@@ -24,7 +24,7 @@ class IndexModel extends Model implements IndexFace {
 	public function __construct($data)
 	{
 		parent::__construct($data);
-		if ($data) throw new \Exception('用户未登录!');
+		if (empty($data)) throw new \Exception('用户未登录!');
 		$this->data = $data;
 	}
 
