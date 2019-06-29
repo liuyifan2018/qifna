@@ -53,8 +53,7 @@ class Index extends Controller{
 	public function index(){
 		try{
 			$this->model = $this->model();
-			$classify = Note::classify();
-			var_dump($classify);
+			$arrIfy = Note::classify();
 			switch (Request()){
 				case Request::isGet():
 					$classify = input('get.classify');
@@ -65,7 +64,8 @@ class Index extends Controller{
 				default:$this->error("找不到此页面!");break;
 			}
 			return view('index',[
-				'classify' => $classify
+				'classify' => $arrIfy,
+				'data'  =>  $this->data
 			]);
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );

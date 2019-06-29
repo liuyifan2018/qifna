@@ -7,6 +7,7 @@
  */
 namespace app\forum\controller;
 use app\forum\model\NoteModel;
+use app\forum\Traits\OutMsg;
 use think\Controller;
 use think\facade\Request;
 use app\forum\Traits\User;
@@ -73,27 +74,87 @@ class Note extends Controller {
 	}
 
 	/**
-	 * @return mixed|\think\response\View
+	 * return mixed|\think\response\View
+	 * @throws \Exception
+	 * 发布帖子
 	 */
-	public function addNote( ){
+	public function addNote(){
 		try{
 			$this->model = $this->model();
 			if (Request::isPost()){
-				$data = input('post.');
-				$this->model->addNote( $data );
+				$data = json_decode(file_get_contents('php://input'),true);
+				$msg = $this->model->addNote( $data );
+				return $msg;
 			}
 			return view('addNote');
 		}catch (\Exception $e){
-			return json_decode( $e->getMessage(),true);
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
 		}
 	}
 
+	/**
+	 * @return mixed|\think\response\Json|\think\response\View
+	 * @throws \Exception
+	 * 编辑帖子
+	 */
 	public function editNote(){
 		try{
 			$this->model = $this->model();
+			$noteInfo = "";
+			if (Request::isGet()){
+				$id = trim(input('get.id'));
+				$noteInfo = $this->model->superInfo($id,null);
+			}elseif (Request::isPost()){
+				$data = json_decode(file_get_contents('php://input'),true);
+				$msg = $this->model->editNote( $data );
+				return $msg;
+			}
+			return view('editNote',[
+				'noteInfo' => $noteInfo
+			]);
 		}catch (\Exception $e){
-
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
 		}
+	}
+
+	/**
+	 * @return mixed|\think\response\Json
+	 * @throws \Exception
+	 * 删除帖子
+	 */
+	public function del(){
+		try{
+			$this->model = $this->model();
+			if (Request::isGet()){
+				$id = input('get.id');
+				$msg = $this->model->del( $id );
+				return $msg;
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * @return \think\response\Json
+	 * @throws \Exception
+	 */
+	public function content(){
+		try{
+			if (Request::isPost()){
+				$data = input('post');
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
+		}
+	}
+
+	public function good(){
+
+	}
+
+	public function report(){
+
 	}
 
 }

@@ -9,6 +9,7 @@ namespace app\forum\model;
 use app\forum\Interfaces\NoteFace;
 use app\forum\Traits\CURD;
 use app\forum\Traits\Date;
+use app\forum\Traits\OutMsg;
 use think\Db;
 use think\Model;
 class NoteModel extends Model implements NoteFace {
@@ -47,37 +48,69 @@ class NoteModel extends Model implements NoteFace {
 
 	/**
 	 * @param $data
-	 * @return mixed|void
+	 * @return mixed
 	 * @throws \Exception
+	 * 发布帖子
 	 */
 	public function addNote($data)
 	{
+		Db::transaction(function(){
 		$data['date'] = Date::getNowTime();
 		$data['username'] = $this->data['username'];
 		$arr = ['title','content','classify','money'];
 		for ($i = 0; $i < count($arr); $i++){
 			if($data[$arr[$i]] == ""){
-				throw new \Exception('{"code":"0","msg":"必填项不能为空!"}');
+				return OutMsg::outErrorMsg("必填项不能为空!");
 			}
 		}
 		if ($this->data['money'] < $data['money']){
-			throw new \Exception('{"code":"0","msg":"余额不足"}');
+			return OutMsg::outErrorMsg("余额不足!");
 		}
-		$add = Db::table('forum_note')->insert($data);
-		if ($add === false){
-			throw new \Exception('{"code":"0","msg":"发布失败"}');
-		}
-		throw new \Exception('{"code":"1","msg":"发布成功"}');
+			Db::name('user')->where(['username' => $this->data['username']])->setDec('money',$data['money']);
+			$add = Db::table('forum_note')->insert($data);
+			if ($add === false){
+				return OutMsg::outErrorMsg("发布失败!");
+			}
+		});
+		return OutMsg::outSuccessMsg("发布成功!");
 	}
 
+	/**
+	 * @param $data
+	 * @return mixed
+	 * @throws \Exception
+	 * 编辑帖子
+	 */
 	public function editNote($data)
 	{
-		// TODO: Implement editNote() method.
+		$arr = ['title','content','classify','money'];
+		for ($i = 0; $i < count($arr); $i++){
+			if($data[$arr[$i]] == "") return OutMsg::outErrorMsg("必填项不能为空!");
+		}
+		if ($this->data['money'] < $data['money']){
+			return OutMsg::outErrorMsg("余额不足!");
+		}
+		$edit = Db::table('forum_note')->where(['id' => $data['id']])->update($data);
+		if ($edit === false){
+			return OutMsg::outErrorMsg("发布失败!");
+		}
+		return OutMsg::outSuccessMsg("发布成功!");
 	}
 
+	/**
+	 * @param $id
+	 * @return mixed
+	 * @throws \Exception
+	 * 删除帖子
+	 */
 	public function del($id)
 	{
-		// TODO: Implement del() method.
+		if (empty($id) || !is_numeric($id)) return OutMsg::outErrorMsg('参数错误!');
+		$del = Db::name('forum_note')->where(['id' => $id])->delete();
+		if ($del === false){
+			return OutMsg::outErrorMsg('删除失败!');
+		}
+		return OutMsg::outSuccessMsg('删除成功!');
 	}
 
 	/**

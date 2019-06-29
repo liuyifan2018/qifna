@@ -1,3 +1,10 @@
+$(function(){
+    $(document).keypress(function (e) {
+        if (e.keyCode == 13){
+            document.getElementById('but').click();
+        }
+    })
+});
 function login(){
     let username = $("#username").val();
     let password = $("#password").val();
@@ -22,24 +29,27 @@ function login(){
             'Content-Type': 'application/json'
         })
     });
+    console.log(username);
     fetch(request)
-        .then((res) => {
-            return res.json();  //第一次then的时候转JOSN格式
+        .then(res => {
+            //请求成功和失败都会进入第一个then
+            if (res.ok){
+                return res.json();
+            }else{
+                throw '请求错误!';
+            }
         })
-        .then((res) => {
-            let resData = res;   //第二次的then的时候就可以得到这个对象了
-            if(resData.code == 0){
-                layer.msg(resData.msg,{icon:5});
+        .then(res => {
+            //请求成功进入的方法 (请求成功不代表程序运行成功!)
+            if(res.code == 0){
+                throw res.msg;
             }else{
                 window.location.href = '../Index/index';
             }
         })
         .catch(error =>{
-            layer.msg(error + "请稍后重试",{icon:2});
+            //接收 throw 返回的信息
+            layer.msg(error,{icon:5});
         });
-}
-document.onkeydown = function(e){
-    if(e.keyCode == 13){
-        document.getElementById('btn').click();
-    }
+    //总结:fetch的第一个then是接到成功或失败的信息,catch是在js里报错原因;
 }

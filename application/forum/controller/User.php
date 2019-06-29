@@ -7,6 +7,7 @@
  */
 namespace app\forum\controller;
 use app\forum\model\UserModel;
+use app\forum\Traits\Date;
 use app\forum\Traits\OutMsg;
 use think\Controller;
 use think\facade\Request;
@@ -106,9 +107,9 @@ class User extends Controller {
 				$pass = null;
 			}
 			if(Request::isPost()){
-				$data = input('post.');
+				$data = json_decode(file_get_contents('php://input'),true);
 				$msg = $this->model->login( $data );
-				return json($msg);  //fetch请求需要返回json数组,catch出去的异常信息接收不到
+				return $msg;  //fetch请求需要返回json数组,catch出去的异常信息接收不到
 			}
 			$username = input('get.username');//注册后会带上参数跳到这个页面
 			return view('login',[
@@ -123,11 +124,13 @@ class User extends Controller {
 	}
 
 	/**
-	 * @return mixed|\think\response\View
+	 * @return \think\response\Json|\think\response\View
+	 * @throws \Exception
 	 * 注册账号
 	 */
 	public function register(){
 		try{
+			$this->model = $this->model();
 			$str = "0123456789";
 			$max = strlen($str) - 1;
 			$username = "";
@@ -143,29 +146,29 @@ class User extends Controller {
 				}
 			}
 			if(Request()->isPost()){
-				$data = input('post.');
-				$data['date'] = \Date::getNowTime();
+				$data = json_decode(file_get_contents('php://input'),true);
+				$data['date'] = Date::getNowTime();
 				$data['insider'] = '普通用户';
 				$data['exp']    =   0;
 				$data['target'] = 60;
 				$data['lv'] =   0;
-				$this->model->register($data);
+				$msg = $this->model->register($data);
+				return $msg;
 			}
 			return view('register',[
 				'username'  =>  $username
 			]);
 		}catch (\Exception $e){
-			return json_decode( $e->getMessage() ,true);
+			return OutMsg::outAbnormalMsg($e->getMessage());
 		}
 	}
 
 	/**
-	 * @return mixed|void
-	 * 退出账号
+	 * 注销
 	 */
 	public function loginOut(){
 		$this->model = $this->model();
-		$data = \User::dataInfo();
+		$data = \app\forum\Traits\User::dataInfo();
 		$this->model->loginOut( $data );
 	}
 

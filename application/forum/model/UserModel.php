@@ -49,7 +49,7 @@ class UserModel extends Model implements UserFace {
 			'date'  =>  Date::getNowTime(),
 			'is_show'   =>  1
 		];//登录日志信息
-		$userInfo = Db::table('user')->where(['username' => $data['username']])->find();
+		$userInfo = Db::name('user')->where(['username' => $data['username']])->find();
 		$log = Db::name('log')->where(['username' => $data['username'],'log' => '密码错误'])
 			->whereTime('date','between',[Date::getNowStartTime() , Date::getNowEndTime()])
 			->count();//查询日志报错次数
@@ -59,8 +59,7 @@ class UserModel extends Model implements UserFace {
 		if(empty($userInfo)) return OutMsg::outErrorMsg("账号不存在");
 		if($data['password'] != $userInfo['password']) {
 			Db::name('log')->data($msg)->insert(['log' => '密码错误']);
-			$info['code'] = 0;$info['msg'] = "密码错误!";
-			return $info;
+			return OutMsg::outErrorMsg("密码错误!");
 		}elseif($log >= 5) {
 			return OutMsg::outErrorMsg("发现异常登录,已无法登录!");
 		}else{
