@@ -78,9 +78,9 @@ class UserModel extends Model implements UserFace {
 	 */
 	public function register( $data ){
 		if($data['password'] != $data['password2']){
-			throw new \Exception('{"code":"0" , "msg":"两次密码不一致!"}');
+			return OutMsg::outErrorMsg("两次密码不一致!");
 		}elseif(!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $data['email'])){
-			throw new \Exception('{"code":"0" , "msg":"邮箱格式错误!"}');
+			return OutMsg::outErrorMsg("邮箱格式错误!");
 		}else{
 			$insert = Db::name('user')->strict(false)->insert($data);
 			if($insert === false){
@@ -91,7 +91,7 @@ class UserModel extends Model implements UserFace {
 	}
 
 	public function loginOut( $data ){
-		Db::name('user')->where(['username' => $data['username']])->update(array('state' => '离线'));
+		Db::name('user')->where(['username' => $data['username']])->update(['state' => '离线']);
 		Session::clear('data');
 		//清除缓存
 		$this->redirect('login');

@@ -1,44 +1,68 @@
-$(function(){
-    function addNote() {
+function addNote() {
+    try {
         let title = $("#title").val();
         let content = $("#content").val();
         let classify = $("#classify").val();
         let money = $("#money").val();
         let is_content = $(".orders:checked").val();
+        let data = {
+            title:title,
+            content:content,
+            classify:classify,
+            money:money,
+            is_content:is_content
+        };
         let arr = [title,content,classify,money,is_content];
-        for (let i = 0; i < arr.length; i++){
-            if (arr[i] == ""){
-                layer.msg('必填项不能为空!',{icon:5});
-                return false;
-            }
-        }
-        let request = new Request("Note/addNote",{
-            body:JSON.stringify({
-                arr:arr
-            }),
-            method:'POST',
-        });
+        processing(arr);
+        let request = requestMethod("Note/addNote",'POST',data);
         fetch(request)
-            .then((res) => {
-                let resData = res.json();
-                layer.open({
-                    title:'提示信息',
-                    content:resData.msg,
-                    yes:function (index) {
-                        layer.close(index);
-                        window.location.reload();
-                    }
-                });
-                setTimeout(function () {
-                    window.location.reload();
-                },5000);
-            })
-            .catch((error) => {
-                layer.msg(error,{icon: 5});
-            })
+            .then(requestHandle)
+            .then(requestSuccess)
+            .catch(requestError)
+    }catch (err) {
+        console.log(err);
+        layer.msg(err,{icon:5});
     }
-    
-    function editNote(id) {
-        if (id == null) layer.msg('参数错误!');
+}
+function editNote(id) {
+    try {
+        is_empty(id);
+        let title = $("#title").val();
+        let content = $("#content").val();
+        let classify = $("#classify").val();
+        let money = $("#money").val();
+        let is_content = $(".orders:checked").val();
+        let data = {
+            title:title,
+            content:content,
+            classify:classify,
+            money:money,
+            is_content:is_content
+        };
+        let arr = [title,content,classify,money,is_content];
+        processing(arr);
+        let request = requestMethod("Note/editNote",'POST',data);
+        fetch(request)
+            .then(requestHandle)
+            .then(requestSuccess)
+            .catch(requestError)
+    }catch (err) {
+        console.log(err);
+        layer.msg(err,{icon:5});
     }
-});
+}
+
+function delNote(id) {
+    try {
+        is_empty(id);
+        let data = {id:id};
+        let request = requestMethod('Note/delNote','GET',data);
+        fetch(request)
+            .then(requestHandle)
+            .then(requestSuccess)
+            .catch(requestError);
+    }catch (err) {
+        console.log(err);
+        layer.msg(err,{icon:5});
+    }
+}

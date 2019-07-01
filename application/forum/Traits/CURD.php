@@ -7,6 +7,7 @@
  */
 namespace app\forum\Traits;
 use think\Db;
+
 trait CURD{
 
 	/**
@@ -20,5 +21,22 @@ trait CURD{
 		$key = Db::name($modelName)->find();
 		$keys = array_keys($key);
 		return $keys;
+	}
+
+	/**
+	 * @return array|mixed|string|\think\response\Json
+	 * @throws \Exception
+	 */
+	public static function PurificationParam(){
+		$data = json_decode(file_get_contents('php://input'),true);
+		if (empty($data)) return OutMsg::outAbnormalMsg('未接收到任何参数!');
+		if (is_array($data)){
+			foreach ($data as $k => $v){
+				$data[$k] = trim($v);
+			}
+		}else{
+			$data = trim($data);
+		}
+		return $data;
 	}
 }

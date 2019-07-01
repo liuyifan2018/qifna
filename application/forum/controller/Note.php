@@ -7,10 +7,12 @@
  */
 namespace app\forum\controller;
 use app\forum\model\NoteModel;
+use app\forum\Traits\Date;
 use app\forum\Traits\OutMsg;
 use think\Controller;
 use think\facade\Request;
 use app\forum\Traits\User;
+use app\forum\Traits\CURD;
 
 class Note extends Controller {
 	/**
@@ -30,6 +32,11 @@ class Note extends Controller {
 	protected $data;
 
 	/**
+	 * @var $param
+	 * 接收参数
+	 */
+	protected $param;
+	/**
 	 * 初始化
 	 */
 	public function initialize()
@@ -38,6 +45,7 @@ class Note extends Controller {
 		try{
 			$data = User::dataInfo();
 			$this->model = new NoteModel( $data );
+			$this->param = CURD::PurificationParam();
 			$this->data = $data;
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
@@ -45,11 +53,12 @@ class Note extends Controller {
 	}
 
 	/**
+	 * @param $data
 	 * @return NoteModel
 	 * @throws \Exception
 	 */
-	public function model(){
-		return new NoteModel( User::dataInfo() );
+	public function model( $data ){
+		return new NoteModel( $data );
 	}
 
 	/**
@@ -58,10 +67,9 @@ class Note extends Controller {
 	 */
 	public function note(){
 		try{
-			$this->model = $this->model();
 			if(Request::isGet()){
-				$id = input('get.id',0,'intval');
-				$noteInfo = $this->model->note( $id );
+				$data = $this->param;
+				$noteInfo = $this->model($this->data)->note( $data );
 				return view('note',[
 					'note'  =>  $noteInfo
 				]);
@@ -80,11 +88,10 @@ class Note extends Controller {
 	 */
 	public function addNote(){
 		try{
-			$this->model = $this->model();
 			if (Request::isPost()){
-				$data = json_decode(file_get_contents('php://input'),true);
-				$msg = $this->model->addNote( $data );
-				return $msg;
+				$data = $this->param;
+				$Message = $this->model($this->data)->addNote( $data );
+				return $Message;
 			}
 			return view('addNote');
 		}catch (\Exception $e){
@@ -99,15 +106,14 @@ class Note extends Controller {
 	 */
 	public function editNote(){
 		try{
-			$this->model = $this->model();
 			$noteInfo = "";
 			if (Request::isGet()){
-				$id = trim(input('get.id'));
-				$noteInfo = $this->model->superInfo($id,null);
+				$data = $this->param;
+				$noteInfo = $this->model($this->data)->superInfo($data,null);
 			}elseif (Request::isPost()){
-				$data = json_decode(file_get_contents('php://input'),true);
-				$msg = $this->model->editNote( $data );
-				return $msg;
+				$data = CURD::PurificationParam();
+				$Message = $this->model($this->data)->editNote( $data );
+				return $Message;
 			}
 			return view('editNote',[
 				'noteInfo' => $noteInfo
@@ -122,13 +128,12 @@ class Note extends Controller {
 	 * @throws \Exception
 	 * 删除帖子
 	 */
-	public function del(){
+	public function delNote(){
 		try{
-			$this->model = $this->model();
 			if (Request::isGet()){
-				$id = input('get.id');
-				$msg = $this->model->del( $id );
-				return $msg;
+				$data = $this->param;
+				$Message = $this->model($this->data)->del( $data );
+				return $Message;
 			}
 		}catch (\Exception $e){
 			return OutMsg::outAbnormalMsg( $e->getMessage() );
@@ -138,23 +143,56 @@ class Note extends Controller {
 	/**
 	 * @return \think\response\Json
 	 * @throws \Exception
+	 * 评论帖子
 	 */
 	public function content(){
 		try{
 			if (Request::isPost()){
-				$data = input('post');
+				$data = $this->param;
+				$data['date'] = Date::getNowTime();
+				$data['is_show'] = 1;
+				$Message = $this->model($this->data)->content($data);
+				return $Message;
 			}
 		}catch (\Exception $e){
 			return OutMsg::outAbnormalMsg( $e->getMessage() );
 		}
 	}
 
+	/**
+	 * @return mixed|\think\response\Json
+	 * @throws \Exception
+	 * 帖子点赞
+	 */
 	public function good(){
-
+		try{
+			if (Request::isGet()){
+				$data = $this->param;
+				$Message = $this->model($this->data)->good($data);
+				return $Message;
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
+		}
 	}
 
+	/**
+	 * @return mixed|\think\response\Json|void
+	 * @throws \Exception
+	 * 举报帖子
+	 */
 	public function report(){
-
+		try{
+			if (Request::isPost()){
+				$data = $this->param;
+				$data['date'] = Date::getNowTime();
+				$data['username'] = $this->data['username'];
+				$Message = $this->model($this->data)->report($data);
+				return $Message;
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
+		}
 	}
 
 }

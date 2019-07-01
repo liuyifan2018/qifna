@@ -33,7 +33,8 @@ interface NoteFace{
 	 * @return mixed
 	 * 删除帖子
 	 */
-	public function del($id);
+	public function delNote($id);
+
 	/**
 	 * @param $id
 	 * @param $value
@@ -50,10 +51,17 @@ interface NoteFace{
 	public function content( $data );
 
 	/**
-	 * @param $id
+	 * @param $data
 	 * @return mixed
 	 * 点赞
 	 */
-	public function good($id);
+	public function good($data);
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * 举报
+	 */
+	public function report($data);
 
 }

@@ -46,6 +46,7 @@ class NoteModel extends Model implements NoteFace {
 		return $note;
 	}
 
+
 	/**
 	 * @param $data
 	 * @return mixed
@@ -55,17 +56,17 @@ class NoteModel extends Model implements NoteFace {
 	public function addNote($data)
 	{
 		Db::transaction(function(){
-		$data['date'] = Date::getNowTime();
-		$data['username'] = $this->data['username'];
-		$arr = ['title','content','classify','money'];
-		for ($i = 0; $i < count($arr); $i++){
-			if($data[$arr[$i]] == ""){
-				return OutMsg::outErrorMsg("必填项不能为空!");
+			$data['date'] = Date::getNowTime();
+			$data['username'] = $this->data['username'];
+			$arr = ['title','content','classify','money'];
+			for ($i = 0; $i < count($arr); $i++){
+				if($data[$arr[$i]] == ""){
+					return OutMsg::outErrorMsg("必填项不能为空!");
+				}
 			}
-		}
-		if ($this->data['money'] < $data['money']){
-			return OutMsg::outErrorMsg("余额不足!");
-		}
+			if ($this->data['money'] < $data['money']){
+				return OutMsg::outErrorMsg("余额不足!");
+			}
 			Db::name('user')->where(['username' => $this->data['username']])->setDec('money',$data['money']);
 			$add = Db::table('forum_note')->insert($data);
 			if ($add === false){
@@ -103,7 +104,7 @@ class NoteModel extends Model implements NoteFace {
 	 * @throws \Exception
 	 * 删除帖子
 	 */
-	public function del($id)
+	public function delNote($id)
 	{
 		if (empty($id) || !is_numeric($id)) return OutMsg::outErrorMsg('参数错误!');
 		$del = Db::name('forum_note')->where(['id' => $id])->delete();
@@ -135,13 +136,70 @@ class NoteModel extends Model implements NoteFace {
 		return $note;
 	}
 
+	/**
+	 * @param $data
+	 * @return mixed
+	 * @throws \Exception
+	 * 评论帖子
+	 */
 	public function content($data)
 	{
-		// TODO: Implement content() method.
+		if (empty($data['n_id']) || !is_numeric($data['n_id'])) return OutMsg::outErrorMsg('帖子不存在!');
+		if (empty($data['content'])) return OutMsg::outErrorMsg('评论内容不能为空!');
+		if (strlen($data['content']) < 10 || strlen($data['content']) > 255) return OutMsg::outErrorMsg('评论内容限制在10-255字内');
+		$addContent = Db::name('forum_content')->insert($data);
+		if ($addContent === false){
+			return OutMsg::outSuccessMsg('评论失败!');
+		}
+		return OutMsg::outSuccessMsg('评论成功!');
 	}
 
-	public function good($id)
+	/**
+	 * @param $data
+	 * @return mixed
+	 * @throws \Exception
+	 * 帖子点赞
+	 */
+	public function good($data)
 	{
-		// TODO: Implement good() method.
+		if (empty($data['n_id']) || !is_numeric($data['n_id'])) return OutMsg::outErrorMsg('帖子不存在!');
+		$map = [
+			'username' => $this->data['username'],
+			'n_id'  =>  $data['n_id']
+		];
+		$is_good = Db::name('forum_good')->where($map)->find();
+		if(!empty($is_good)){
+			return OutMsg::outErrorMsg('不能重复点赞!');
+		}
+		$good = Db::name('forum_good')->strict(false)->insert($data);
+		if ($good === false){
+			return OutMsg::outErrorMsg('点赞失败!');
+		}
+		return OutMsg::outSuccessMsg('点赞成功!');
+	}
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * @throws \Exception
+	 * 举报帖子
+	 */
+	public function report($data)
+	{
+		if (empty($data['n_id']) || !is_numeric($data['n_id'])) return OutMsg::outErrorMsg('帖子不存在!');
+		if (strlen($data['content']) < 10 || strlen($data['content']) > 255) return OutMsg::outErrorMsg('举报内容限制在10-255字内');
+		$map = [
+			'username' => $this->data['username'],
+			'n_id'  =>  $data['n_id']
+		];
+		$is_report = Db::name('forum_report')->where($map)->find();
+		if(!empty($is_report)){
+			return OutMsg::outErrorMsg('不能重复举报!');
+		}
+		$report = Db::name('forum_good')->strict(false)->insert($data);
+		if ($report === false){
+			return OutMsg::outErrorMsg('举报失败!');
+		}
+		return OutMsg::outSuccessMsg('举报成功!');
 	}
 }
