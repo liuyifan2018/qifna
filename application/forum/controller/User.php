@@ -175,6 +175,8 @@ class User extends Controller {
 	public function loginOut(){
 		$data = \app\forum\Traits\User::dataInfo();
 		$this->model()->loginOut( $data );
+		sleep(2);   //延迟两秒钟，给用户点心理压力
+		$this->redirect('login');
 	}
 
 }

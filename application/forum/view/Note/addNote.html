@@ -1,9 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
+{include file="../application/forum/view/public.html"/}
+{include file="../application/forum/view/fetch.html"/}
+<script src="http://localhost/Qifan/public/static/js/forum/Note/note.js"></script>
+<title>发表新帖 - Fly社区</title>
 </head>
 <body>
+{include file="../application/forum/view/template.html"/}
+<div class="layui-container fly-marginTop">
+	<div class="fly-panel" pad20 style="padding-top: 5px;">
+		<div class="layui-form layui-form-pane">
+			<div class="layui-tab layui-tab-brief" lay-filter="user">
+				<ul class="layui-tab-title">
+					<li class="layui-this">发表新帖</li>
+				</ul>
+				<div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+					<div class="layui-tab-item layui-show">
+						<div class="layui-row layui-col-space15 layui-form-item">
+							<div class="layui-col-md3"><label class="layui-form-label">所在专栏</label>
+								<div class="layui-input-block">
+									<select class="diy-select" id="classify">
+										<option value="">请输入</option>
+										{volist name="arr" id="vo"}
+										<option value="{$vo.id}">{$vo.title}</option>
+										{/volist}
+									</select>
+								</div>
+							</div>
+							<div class="layui-col-md9">
+								<label for="title" class="layui-form-label">标题</label>
+								<div class="layui-input-block">
+									<input type="text" id="title" class="layui-input">
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<div class="layui-input-block">
+								<textarea id="content" placeholder="详细描述" class="layui-textarea fly-editor" style="min-height: 260px;"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline"><label class="layui-form-label">悬赏</label>
+								<div class="layui-input-inline" style="width: 190px;">
+									<select id="money" class="diy-select">
+										<option value="20">20飞吻</option>
+										<option value="50">50飞吻</option>
+										<option value="80">80飞吻</option>
+										<option value="100">100飞吻</option>
+										<option value="200">200飞吻</option>
+										<option value="500">500飞吻</option>
+									</select>
+								</div>
+								<div class="layui-form-mid layui-word-aux">
+									<span style="padding-right: 5px;">发表后无法更改飞吻</span>
+									<a href="/jie/13435/" style="color: #FF5722;"><strong>（提升飞吻）</strong></a>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline"><label class="layui-form-label">是否评论</label>
+								<div class="layui-input-inline" style="width: 190px;">
+									<select id="is_content" class="diy-select">
+										<option value="1">是</option>
+										<option value="2">否</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<button class="layui-btn" onclick="addNote()">立即发布</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="fly-footer"></div>
 </body>
 </html>

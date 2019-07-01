@@ -11,8 +11,8 @@ use app\forum\Traits\CURD;
 use app\forum\Traits\Date;
 use app\forum\Traits\OutMsg;
 use think\Db;
-use think\Model;
-class NoteModel extends Model implements NoteFace {
+use think\facade\Cache;
+class NoteModel extends BaseModel implements NoteFace {
 
 	/**
 	 * @var $data
@@ -42,7 +42,7 @@ class NoteModel extends Model implements NoteFace {
 	{
 		if (empty($id)) throw new \Exception('帖子不存在!');
 		$note['note'] = $this->superInfo( $id ,''); //获取帖子信息
-		Db::table('forum_note')->where(array('id' => $id))->setInc('num');    //增加浏览量
+		Db::name('forum_note')->where(array('id' => $id))->setInc('num');    //增加浏览量
 		return $note;
 	}
 
@@ -55,24 +55,26 @@ class NoteModel extends Model implements NoteFace {
 	 */
 	public function addNote($data)
 	{
-		Db::transaction(function(){
-			$data['date'] = Date::getNowTime();
-			$data['username'] = $this->data['username'];
-			$arr = ['title','content','classify','money'];
-			for ($i = 0; $i < count($arr); $i++){
-				if($data[$arr[$i]] == ""){
-					return OutMsg::outErrorMsg("必填项不能为空!");
-				}
-			}
-			if ($this->data['money'] < $data['money']){
-				return OutMsg::outErrorMsg("余额不足!");
-			}
-			Db::name('user')->where(['username' => $this->data['username']])->setDec('money',$data['money']);
-			$add = Db::table('forum_note')->insert($data);
-			if ($add === false){
-				return OutMsg::outErrorMsg("发布失败!");
-			}
-		});
+		if(Cache::get(md5($this->data['username'].'article'))){ //检测缓存是否存在
+			return OutMsg::outErrorMsg("60s后才能重新发布!");
+		}
+		$data['date'] = Date::getNowTime();
+		$data['username'] = $this->data['username'];
+		$data['is_show'] = 2;
+		$arr = ['title','content','classify','money'];
+		$this->Handle($data,$arr);
+		if ($this->data['money'] < $data['money']){
+			return OutMsg::outErrorMsg("余额不足!");
+		}
+		Cache::set(md5($this->data['username'].'article'),1,60);    //添加缓存
+		Db::startTrans();
+		$add = Db::name('forum_note')->strict(false)->insert($data);
+		Db::name('user')->where(['username' => $this->data['username']])->setDec('money',$data['money']);
+		if ($add === false){
+			Db::rollback();
+			return OutMsg::outErrorMsg("发布失败!");
+		}
+		Db::commit();
 		return OutMsg::outSuccessMsg("发布成功!");
 	}
 
@@ -84,14 +86,10 @@ class NoteModel extends Model implements NoteFace {
 	 */
 	public function editNote($data)
 	{
+		$this->is_empty($data['id']);
 		$arr = ['title','content','classify','money'];
-		for ($i = 0; $i < count($arr); $i++){
-			if($data[$arr[$i]] == "") return OutMsg::outErrorMsg("必填项不能为空!");
-		}
-		if ($this->data['money'] < $data['money']){
-			return OutMsg::outErrorMsg("余额不足!");
-		}
-		$edit = Db::table('forum_note')->where(['id' => $data['id']])->update($data);
+		$this->Handle($data,$arr);
+		$edit = Db::name('forum_note')->where(['id' => $data['id']])->update($data);
 		if ($edit === false){
 			return OutMsg::outErrorMsg("发布失败!");
 		}
@@ -106,7 +104,7 @@ class NoteModel extends Model implements NoteFace {
 	 */
 	public function delNote($id)
 	{
-		if (empty($id) || !is_numeric($id)) return OutMsg::outErrorMsg('参数错误!');
+		$this->is_empty($id);
 		$del = Db::name('forum_note')->where(['id' => $id])->delete();
 		if ($del === false){
 			return OutMsg::outErrorMsg('删除失败!');
@@ -126,12 +124,12 @@ class NoteModel extends Model implements NoteFace {
 		$keys = CURD::getModelInfo('forum_note'); //获取全部字段
 		if (empty($value)){
 			unset($value);
-			$note = Db::table('forum_note')->where(['id' => $id])->find();
+			$note = Db::name('forum_note')->where(['id' => $id])->find();
 		}else{
 			if(!in_array($value,$keys)) {
 				throw new \Exception('字段不存在!');
 			}
-			$note = Db::table('forum_note')->where(['id' => $id])->value($value);
+			$note = Db::name('forum_note')->where(['id' => $id])->value($value);
 		}
 		return $note;
 	}
@@ -144,7 +142,7 @@ class NoteModel extends Model implements NoteFace {
 	 */
 	public function content($data)
 	{
-		if (empty($data['n_id']) || !is_numeric($data['n_id'])) return OutMsg::outErrorMsg('帖子不存在!');
+		$this->is_empty($data['n_id']);
 		if (empty($data['content'])) return OutMsg::outErrorMsg('评论内容不能为空!');
 		if (strlen($data['content']) < 10 || strlen($data['content']) > 255) return OutMsg::outErrorMsg('评论内容限制在10-255字内');
 		$addContent = Db::name('forum_content')->insert($data);
@@ -162,7 +160,7 @@ class NoteModel extends Model implements NoteFace {
 	 */
 	public function good($data)
 	{
-		if (empty($data['n_id']) || !is_numeric($data['n_id'])) return OutMsg::outErrorMsg('帖子不存在!');
+		$this->is_empty($data['n_id']);
 		$map = [
 			'username' => $this->data['username'],
 			'n_id'  =>  $data['n_id']
@@ -186,7 +184,7 @@ class NoteModel extends Model implements NoteFace {
 	 */
 	public function report($data)
 	{
-		if (empty($data['n_id']) || !is_numeric($data['n_id'])) return OutMsg::outErrorMsg('帖子不存在!');
+		$this->is_empty($data['n_id']);
 		if (strlen($data['content']) < 10 || strlen($data['content']) > 255) return OutMsg::outErrorMsg('举报内容限制在10-255字内');
 		$map = [
 			'username' => $this->data['username'],

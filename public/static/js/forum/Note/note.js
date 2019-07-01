@@ -4,7 +4,7 @@ function addNote() {
         let content = $("#content").val();
         let classify = $("#classify").val();
         let money = $("#money").val();
-        let is_content = $(".orders:checked").val();
+        let is_content = $("#is_content").val();
         let data = {
             title:title,
             content:content,
@@ -14,7 +14,7 @@ function addNote() {
         };
         let arr = [title,content,classify,money,is_content];
         processing(arr);
-        let request = requestMethod("Note/addNote",'POST',data);
+        let request = requestMethod("addNote",'POST',data);
         fetch(request)
             .then(requestHandle)
             .then(requestSuccess)

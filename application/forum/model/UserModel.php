@@ -10,11 +10,10 @@ use app\forum\Interfaces\UserFace;
 use app\forum\Traits\Date;
 use app\forum\Traits\OutMsg;
 use think\Db;
-use think\Model;
 use think\facade\Session;
 use think\facade\Cookie;
 
-class UserModel extends Model implements UserFace {
+class UserModel extends BaseModel implements UserFace {
 
 	public function __construct()
 	{
@@ -38,11 +37,7 @@ class UserModel extends Model implements UserFace {
 			Cookie::set('user',null); //删除之前保留密码标记
 		}
 		$arr = ['username','password'];
-		for ($i = 0; $i < count($arr); $i++){
-			if ($data[$arr[$i]] == ""){
-				return OutMsg::outErrorMsg("必填空不能为空!");
-			}
-		}
+		$this->Handle($data,$arr);
 		$msg = [
 			'username' => $data['username'],
 			'login_type'    =>  2,
@@ -94,6 +89,6 @@ class UserModel extends Model implements UserFace {
 		Db::name('user')->where(['username' => $data['username']])->update(['state' => '离线']);
 		Session::clear('data');
 		//清除缓存
-		$this->redirect('login');
+
 	}
 }

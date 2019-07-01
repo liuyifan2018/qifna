@@ -30,12 +30,8 @@ function requestSuccess(res) {
         content:res.msg,
         yes:function (index) {
             layer.close(index);
-            window.location.reload();
         }
     });
-    setTimeout(function(){
-        window.layer.close(window.layer.yes());
-    },5000)
 }
 
 //登录专用方法

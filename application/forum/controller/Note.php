@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpInconsistentReturnPointsInspection */
+
 /**
  * Created by PhpStorm.
  * User: Admin
@@ -36,6 +37,13 @@ class Note extends Controller {
 	 * 接收参数
 	 */
 	protected $param;
+
+	/**
+	 * @var $classify
+	 * 分类
+	 */
+	protected $classify;
+
 	/**
 	 * 初始化
 	 */
@@ -47,6 +55,7 @@ class Note extends Controller {
 			$this->model = new NoteModel( $data );
 			$this->param = CURD::PurificationParam();
 			$this->data = $data;
+			$this->classify = \app\forum\Traits\Note::classify();
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
 		}
@@ -71,7 +80,9 @@ class Note extends Controller {
 				$data = $this->param;
 				$noteInfo = $this->model($this->data)->note( $data );
 				return view('note',[
-					'note'  =>  $noteInfo
+					'note'  =>  $noteInfo,
+					'classify'  =>  $this->classify,
+					'data'  =>  $this->data
 				]);
 			}else{
 				$this->error('参数错误!');
@@ -93,7 +104,11 @@ class Note extends Controller {
 				$Message = $this->model($this->data)->addNote( $data );
 				return $Message;
 			}
-			return view('addNote');
+			return view('addNote',[
+				'classify'  =>  $this->classify,
+				'data'  =>  $this->data,
+				'arr'   =>  $this->classify
+			]);
 		}catch (\Exception $e){
 			return OutMsg::outAbnormalMsg( $e->getMessage() );
 		}
@@ -116,7 +131,9 @@ class Note extends Controller {
 				return $Message;
 			}
 			return view('editNote',[
-				'noteInfo' => $noteInfo
+				'noteInfo' => $noteInfo,
+				'classify'  =>  $this->classify,
+				'data'  =>  $this->data
 			]);
 		}catch (\Exception $e){
 			return OutMsg::outAbnormalMsg( $e->getMessage() );
@@ -132,7 +149,7 @@ class Note extends Controller {
 		try{
 			if (Request::isGet()){
 				$data = $this->param;
-				$Message = $this->model($this->data)->del( $data );
+				$Message = $this->model($this->data)->delNote( $data );
 				return $Message;
 			}
 		}catch (\Exception $e){

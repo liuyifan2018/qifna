@@ -7,6 +7,7 @@
  */
 namespace app\forum\controller;
 use app\forum\model\IndexModel;
+use app\forum\Traits\CURD;
 use think\Controller;
 use think\facade\Request;
 use app\forum\Traits\User;
@@ -27,6 +28,12 @@ class Index extends Controller{
 	protected $model;
 
 	/**
+	 * @var $param
+	 * 接收参数
+	 */
+	protected $param;
+
+	/**
 	 * 初始化
 	 */
 	public function initialize()
@@ -36,6 +43,7 @@ class Index extends Controller{
 			$data = User::dataInfo();
 			$this->model = new IndexModel($data);
 			$this->data = $data;
+			$this->param = CURD::PurificationParam();
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
 		}
