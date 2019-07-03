@@ -40,7 +40,8 @@ class IndexModel extends Model implements IndexFace {
 
 	public function index()
 	{
-
+		$lists['hotNote'] = Note::hotNote($this->map);  //最火的帖子
+		return $lists;
 	}
 
 	/**
@@ -50,18 +51,17 @@ class IndexModel extends Model implements IndexFace {
 	 */
 	public function lists( $classify ){
 		if (!empty($classify)){
-			$lists['lists'] = Db::name('forum_note')->where($this->map)->whereOr(['classify' => $classify])->select();
+			$lists = Db::name('forum_note')->where($this->map)->whereOr(['classify' => $classify])->select();
 		}else{
-			$lists['lists'] = Db::name('forum_note')->where($this->map)->select();
+			$lists = Db::name('forum_note')->where($this->map)->select();
 		}
-		foreach ($lists['lists'] as $k => $v){
-			$lists['lists'][$k]['classify'] = Db::name('forum_classify')->where(['id' => $v['classify']])->value('title');
+		foreach ($lists as $k => $v){
+			$lists[$k]['classify'] = Db::name('forum_classify')->where(['id' => $v['classify']])->value('title');
 			$userInfo = Db::name('user')->where(['username' => $v['username']])->field('name,img')->find();
-			$lists['lists'][$k]['name'] = $userInfo['name'];
-			$lists['lists'][$k]['user_photo'] = $userInfo['img'];
-			$lists['lists'][$k]['date']  = date('Y-m-d H:i:s',$v['date']);
+			$lists[$k]['name'] = $userInfo['name'];
+			$lists[$k]['user_photo'] = $userInfo['img'];
+			$lists[$k]['date']  = date('Y-m-d H:i:s',$v['date']);
 		}
-		$lists['hotNotes'] = Note::hotNote($this->map);  //最火的帖子
 		return OutMsg::outSuccessMsg($lists);
 	}
 

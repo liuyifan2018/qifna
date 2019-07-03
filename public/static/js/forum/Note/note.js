@@ -14,8 +14,8 @@ function addNote() {
         };
         let arr = [title,content,classify,money,is_content];
         processing(arr);
-        let request = requestMethod("addNote",'POST',data);
-        fetch(request)
+        let request = requestMethod('POST',data);
+        fetch('addNote',request)
             .then(requestHandle)
             .then(res => {
                 layer.open({
@@ -49,8 +49,8 @@ function editNote(id) {
         };
         let arr = [title,content,classify,money,is_content];
         processing(arr);
-        let request = requestMethod("Note/editNote",'POST',data);
-        fetch(request)
+        let request = requestMethod('POST',data);
+        fetch('editNote',request)
             .then(requestHandle)
             .then(res => {
                 layer.open({
@@ -72,8 +72,8 @@ function delNote(id) {
     try {
         is_empty(id);
         let data = {id:id};
-        let request = requestMethod('Note/delNote','GET',data);
-        fetch(request)
+        let request = requestMethod('GET',data);
+        fetch('delNote',request)
             .then(requestHandle)
             .then(res => {
                 layer.open({

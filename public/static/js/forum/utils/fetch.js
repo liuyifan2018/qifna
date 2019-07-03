@@ -1,21 +1,21 @@
 //请求方法
-function requestMethod(url,method,data) {
+function requestMethod(method,data) {
     let request = {};
-    if (data == null){
-        request = new Request(url,{
-            method:method,
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            })
-        });
-    }else{
-        request = new Request(url,{
+    if (method == 'POST'){
+        request = {
             method:method,
             body:JSON.stringify(data),
             headers: new Headers({
                 'Content-Type': 'application/json'
             })
-        });
+        };
+    }else{
+        request = {
+            method:method,
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        };
     }
     return request;
 }

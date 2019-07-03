@@ -20,8 +20,8 @@ function login(){
         };
         let arr = [username,password];
         processing(arr);
-        let request = requestMethod('login','POST',data);
-        fetch(request)
+        let request = requestMethod('POST',data);
+        fetch('login',request)
             .then(requestHandle)
             .then(res =>{
                 //请求成功进入的方法 (请求成功不代表程序运行成功!)

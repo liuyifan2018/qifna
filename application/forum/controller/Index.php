@@ -88,11 +88,13 @@ class Index extends Controller{
 	 * @return \think\response\Json
 	 * @throws \Exception
 	 */
-	public function lists( ){
-		$classify = $this->param;
-		$lists = $this->model($this->data)->lists($classify);
-		$lists == [] ? []:$lists;
-		return $lists;
+	public function lists(){
+		if (Request::isGet()){
+			$classify = $this->param;
+			$lists = $this->model($this->data)->lists($classify);
+			$lists == [] ? []:$lists;
+			return $lists;
+		}
 	}
 
 	/**

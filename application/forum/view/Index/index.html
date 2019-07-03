@@ -3,93 +3,97 @@
 	<title>论坛首页</title>
 </head>
 <body>
-{include file="../application/forum/view/template.html" /}
-<div class="indexMain" id="project">
-	<div class="indexMain_left">
-		<div class="indexMain_left_btn">
-			<ul>
-				<li><a href="javascript:">置顶</a></li>
-				<li><a href="javascript:" class="on">最新</a></li>
-			</ul>
-		</div>
-		<div class="indexMain_left_con">
-			<div class="indexCon_msg" v-for="list in lists">
-				<img :src="list.user_photo" class="indexCon_msg_pic">
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>{{list.classify}}</span>
-							<p>{{list.title}}</p>
-						</div>
-					</a>
-					<div class="havePic" v-if="list.img != ''">
-						<a v-bind:href="list.img" target="_blank">
-							<img :src="list.img" class="havePic_head"/>
+<div id="project">
+	{include file="../application/forum/view/template.html" /}
+	<div class="indexMain">
+		<div class="indexMain_left">
+			<div class="indexMain_left_btn">
+				<ul>
+					<li><a href="javascript:">置顶</a></li>
+					<li><a href="javascript:" class="on">最新</a></li>
+				</ul>
+			</div>
+			<div class="indexMain_left_con">
+				<div class="indexCon_msg" v-for="list in lists">
+					<img :src="list.user_photo" class="indexCon_msg_pic">
+					<div class="indexCon_msg_detail">
+						<a href="">
+							<div class="indexCon_msg_detail_tittle">
+								<span>{{list.classify}}</span>
+								<p>{{list.title}}</p>
+							</div>
 						</a>
+						<div class="havePic" v-if="list.img != ''">
+							<a v-bind:href="list.img" target="_blank">
+								<img :src="list.img" class="havePic_head"/>
+							</a>
+						</div>
+						<div class="indexCon_msg_detail_other">
+							<ul>
+								<li>{{list.name}}</li>
+								<li>{{list.date}}</li>
+								<li></li>
+								<li><i class="iconfont icon-liulanyanjing" title="人气"></i> {{list.num}}</li>
+							</ul>
+						</div>
 					</div>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>{{list.name}}</li>
-							<li>{{list.date}}</li>
-							<li></li>
-							<li><i class="iconfont icon-liulanyanjing" title="人气"></i> {{list.num}}</li>
+					<div class="clear"></div>
+				</div>
+			</div>
+			<div class="indexFooter">
+				<div class="indexFooter_con">
+					<a href="javascript:"><</a>
+					<a href="" class="on">1</a>
+					<a href="">2</a>
+					<a href="">3</a>
+					<a href="javascript:">></a>
+				</div>
+			</div>
+		</div>
+		<div class="indexMain_right">
+			<div class="indexMain_rightCon">
+				<a href="{:url('Note/addNote')}" class="newMsg">发新帖</a>
+				<div class="indexSearch">
+					<input type="text" placeholder="请输入关键词"/>
+					<input type="submit" value="搜索"/>
+				</div>
+				<div class="indexPublic">
+					<div class="indexPublic_head">
+						本周热议
+					</div>
+					<div class="indexPublic_con">
+						<ul class="weekHot">
+							{volist name="index.hotNote" id="vo"}
+							<li><a href="">{$vo.title}</a>
+								<span><i class="iconfont icon-liulanyanjing" title="人气"></i> {$vo.num}</span>
+							</li>
+							{/volist}
 						</ul>
 					</div>
 				</div>
-				<div class="clear"></div>
+				<div class="indexPublic">
+					<div class="indexPublic_head">
+						友情链接
+					</div>
+					<div class="indexPublic_con">
+						<ul class="indexLink">
+							<li><a href="">拍王淘宝链接</a></li>
+							<li><a href="">拍王网站</a></li>
+							<li><a href="">拍王助手</a></li>
+							<li><a href="">沪牌模拟</a></li>
+							<li><a href="">拍王合作咨询</a></li>
+							<li><a href="">快法务</a></li>
+							<li><a href="">国拍网</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="indexWxpublic">
+					<p>关注微信公众号</p>
+				</div>
 			</div>
 		</div>
-		<div class="indexFooter">
-			<div class="indexFooter_con">
-				<a href="javascript:"><</a>
-				<a href="" class="on">1</a>
-				<a href="">2</a>
-				<a href="">3</a>
-				<a href="javascript:">></a>
-			</div>
-		</div>
+		<div class="clear"></div>
 	</div>
-	<div class="indexMain_right">
-		<div class="indexMain_rightCon">
-			<a href="{:url('Note/addNote')}" class="newMsg">发新帖</a>
-			<div class="indexSearch">
-				<input type="text" placeholder="请输入关键词"/>
-				<input type="submit" value="搜索"/>
-			</div>
-			<div class="indexPublic">
-				<div class="indexPublic_head">
-					本周热议
-				</div>
-				<div class="indexPublic_con">
-					<ul class="weekHot" v-for="hotNote in hotNotes">
-						<li><a href="">{{hotNote.title}}</a>
-							<span><i class="iconfont icon-liulanyanjing" title="人气"></i> {{hotNote.num}}</span>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="indexPublic">
-				<div class="indexPublic_head">
-					友情链接
-				</div>
-				<div class="indexPublic_con">
-					<ul class="indexLink">
-						<li><a href="">拍王淘宝链接</a></li>
-						<li><a href="">拍王网站</a></li>
-						<li><a href="">拍王助手</a></li>
-						<li><a href="">沪牌模拟</a></li>
-						<li><a href="">拍王合作咨询</a></li>
-						<li><a href="">快法务</a></li>
-						<li><a href="">国拍网</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="indexWxpublic">
-				<p>关注微信公众号</p>
-			</div>
-		</div>
-	</div>
-	<div class="clear"></div>
 </div>
 <footer class="publicFooter"></footer>
 </body>
