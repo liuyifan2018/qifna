@@ -17,7 +17,15 @@ function addNote() {
         let request = requestMethod("addNote",'POST',data);
         fetch(request)
             .then(requestHandle)
-            .then(requestSuccess)
+            .then(res => {
+                layer.open({
+                    title:'提示信息',
+                    content:res.msg,
+                    yes:function (index) {
+                        layer.close(index);
+                    }
+                });
+            })
             .catch(requestError)
     }catch (err) {
         console.log(err);
@@ -44,7 +52,15 @@ function editNote(id) {
         let request = requestMethod("Note/editNote",'POST',data);
         fetch(request)
             .then(requestHandle)
-            .then(requestSuccess)
+            .then(res => {
+                layer.open({
+                    title:'提示信息',
+                    content:res.msg,
+                    yes:function (index) {
+                        layer.close(index);
+                    }
+                });
+            })
             .catch(requestError)
     }catch (err) {
         console.log(err);
@@ -59,7 +75,15 @@ function delNote(id) {
         let request = requestMethod('Note/delNote','GET',data);
         fetch(request)
             .then(requestHandle)
-            .then(requestSuccess)
+            .then(res => {
+                layer.open({
+                    title:'提示信息',
+                    content:res.msg,
+                    yes:function (index) {
+                        layer.close(index);
+                    }
+                });
+            })
             .catch(requestError);
     }catch (err) {
         console.log(err);

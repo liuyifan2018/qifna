@@ -1,9 +1,10 @@
 {include file="../application/forum/view/public.html"/}
+{include file="../application/forum/view/fetch.html"/}
 	<title>论坛首页</title>
 </head>
 <body>
 {include file="../application/forum/view/template.html" /}
-<div class="indexMain">
+<div class="indexMain" id="project">
 	<div class="indexMain_left">
 		<div class="indexMain_left_btn">
 			<ul>
@@ -12,194 +13,26 @@
 			</ul>
 		</div>
 		<div class="indexMain_left_con">
-			<!--有主题图循环开始-->
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
+			<div class="indexCon_msg" v-for="list in lists">
+				<img :src="list.user_photo" class="indexCon_msg_pic">
 				<div class="indexCon_msg_detail">
 					<a href="">
 						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
+							<span>{{list.classify}}</span>
+							<p>{{list.title}}</p>
 						</div>
 					</a>
-					<div class="havePic">
-						<a href=""><div class="havePic_head"></div></a>
+					<div class="havePic" v-if="list.img != ''">
+						<a v-bind:href="list.img" target="_blank">
+							<img :src="list.img" class="havePic_head"/>
+						</a>
 					</div>
 					<div class="indexCon_msg_detail_other">
 						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<!--有主题图循环结束-->
-			<!--无主题图循环开始-->
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<!--无主题图循环结束-->
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="havePic">
-						<a href=""><div class="havePic_head"></div></a>
-					</div>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="havePic">
-						<a href=""><div class="havePic_head"></div></a>
-					</div>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
-						</ul>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="indexCon_msg">
-				<div class="indexCon_msg_pic"></div>
-				<div class="indexCon_msg_detail">
-					<a href="">
-						<div class="indexCon_msg_detail_tittle">
-							<span>竞拍</span>
-							<p>关注上海车牌竞拍方面的资讯，对当月竞拍分析发表独到见解</p>
-						</div>
-					</a>
-					<div class="indexCon_msg_detail_other">
-						<ul>
-							<li>花开花落</li>
-							<li>1天前</li>
-							<li>21</li>
-							<li>28</li>
+							<li>{{list.name}}</li>
+							<li>{{list.date}}</li>
+							<li></li>
+							<li><i class="iconfont icon-liulanyanjing" title="人气"></i> {{list.num}}</li>
 						</ul>
 					</div>
 				</div>
@@ -219,13 +52,6 @@
 	<div class="indexMain_right">
 		<div class="indexMain_rightCon">
 			<a href="{:url('Note/addNote')}" class="newMsg">发新帖</a>
-			<div class="pwfb">
-				<div class="pwfbHead">
-					拍王发布
-				</div>
-				<div class="pwfbCon"></div>
-				<div class="pwfbFooter"></div>
-			</div>
 			<div class="indexSearch">
 				<input type="text" placeholder="请输入关键词"/>
 				<input type="submit" value="搜索"/>
@@ -235,13 +61,10 @@
 					本周热议
 				</div>
 				<div class="indexPublic_con">
-					<ul class="weekHot">
-						<li><a href="">关注上海车牌竞拍方面的资讯</a><span>29</span></li>
-						<li><a href="">关注上海车牌竞拍方面的资讯</a><span>29</span></li>
-						<li><a href="">关注上海车牌竞拍方面的资讯</a><span>29</span></li>
-						<li><a href="">关注上海车牌竞拍方面的资讯</a><span>29</span></li>
-						<li><a href="">关注上海车牌竞拍方面的资讯</a><span>29</span></li>
-						<li><a href="">关注上海车牌竞拍方面的资讯</a><span>29</span></li>
+					<ul class="weekHot" v-for="hotNote in hotNotes">
+						<li><a href="">{{hotNote.title}}</a>
+							<span><i class="iconfont icon-liulanyanjing" title="人气"></i> {{hotNote.num}}</span>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -268,8 +91,7 @@
 	</div>
 	<div class="clear"></div>
 </div>
-<footer class="publicFooter">
-	<p>Copyrigh &copy; 2017-2018 PaiWang 上海钦合投资管理有限公司版权所有 沪ICP备16032224号-2</p>
-</footer>
+<footer class="publicFooter"></footer>
 </body>
 </html>
+<script src="http://localhost/Qifan/public/static/js/forum/Index/index.js"></script>

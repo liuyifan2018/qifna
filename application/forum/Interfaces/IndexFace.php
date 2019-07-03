@@ -9,12 +9,17 @@ namespace app\forum\Interfaces;
 interface IndexFace{
 
 	/**
-	 * @param $classify
 	 * @return mixed
 	 * 首页
 	 */
-	public function index($classify);
+	public function index();
 
+	/**
+	 * @param $classify
+	 * @return mixed
+	 * 列表
+	 */
+	public function lists($classify);
 	/**
 	 * @param $title
 	 * @return mixed

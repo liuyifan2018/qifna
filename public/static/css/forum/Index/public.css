@@ -26,7 +26,7 @@
     color: #fff;
 }
 .ltForm{
-    width: 150px;
+    width: 180px;
     height: 60px;
     float: right;
 }
@@ -36,7 +36,8 @@
 }
 .ltForm ul{
     float: left;
-    margin-left: 20px;
+    margin-left: 60px;
+    margin-top:-55px;
 }
 .ltForm ul li{
     float: left;

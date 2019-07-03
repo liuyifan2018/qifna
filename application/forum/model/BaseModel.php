@@ -24,7 +24,6 @@ class BaseModel extends Model {
 				return OutMsg::outErrorMsg("必填项不能为空!");
 			}
 		}
-		exit;
 	}
 
 	/**
@@ -35,6 +34,5 @@ class BaseModel extends Model {
 	 */
 	protected function is_empty($id){
 		if (empty($id) || !is_numeric($id)) return OutMsg::outErrorMsg('参数错误!');
-		exit;
 	}
 }

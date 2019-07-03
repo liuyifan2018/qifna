@@ -34,6 +34,11 @@ class Index extends Controller{
 	protected $param;
 
 	/**
+	 * @var array
+	 */
+	protected $map = [];
+
+	/**
 	 * 初始化
 	 */
 	public function initialize()
@@ -44,6 +49,7 @@ class Index extends Controller{
 			$this->model = new IndexModel($data);
 			$this->data = $data;
 			$this->param = CURD::PurificationParam();
+			$this->map = ['is_show' => 1];
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
 		}
@@ -51,32 +57,55 @@ class Index extends Controller{
 	}
 
 	/**
+	 * @param $data
 	 * @return IndexModel
 	 * @throws \Exception
+	 *
 	 */
-	public function model(){
-		return new IndexModel($this->data);
+	public function model($data){
+		return new IndexModel($data);
 	}
 
+	/**
+	 * @return \think\response\View
+	 */
 	public function index(){
 		try{
-			$this->model = $this->model();
-			$arrIfy = Note::classify();
-			switch (Request()){
-				case Request::isGet():
-					$classify = input('get.classify');
-					$this->model->index( $classify );break;
-				case Request::isPost():
-					$title = input('post.title');
-					$this->model->search($title);break;
-				default:$this->error("找不到此页面!");break;
-			}
+			$arrIfy = Note::classify($this->map);
+			$index = $this->model($this->data)->index();
 			return view('index',[
 				'classify' => $arrIfy,
-				'data'  =>  $this->data
+				'data'  =>  $this->data,
+				'index' =>  $index
 			]);
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
 		}
+	}
+
+
+	/**
+	 * @return \think\response\Json
+	 * @throws \Exception
+	 */
+	public function lists( ){
+		$classify = $this->param;
+		$lists = $this->model($this->data)->lists($classify);
+		$lists == [] ? []:$lists;
+		return $lists;
+	}
+
+	/**
+	 * @return mixed|void
+	 * @throws \Exception
+	 */
+	public function search(){
+		if (Request::isPost()){
+			$title = $this->param;
+			$lists = $this->model($this->data)->search($title);
+		}else{
+			$lists = [];
+		}
+		return $lists;
 	}
 }

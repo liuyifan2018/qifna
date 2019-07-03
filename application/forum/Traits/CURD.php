@@ -29,7 +29,7 @@ trait CURD{
 	 */
 	public static function PurificationParam(){
 		$data = json_decode(file_get_contents('php://input'),true);
-		if (empty($data)) return OutMsg::outAbnormalMsg('未接收到任何参数!');
+		if (empty($data)) return null;
 		if (is_array($data)){
 			foreach ($data as $k => $v){
 				$data[$k] = trim($v);

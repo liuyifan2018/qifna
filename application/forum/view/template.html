@@ -1,3 +1,12 @@
+<style>
+	.image{
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin-top:5px;
+		margin-right: 35px;
+	}
+</style>
 <!-- 头部导航 -->
 <header class="ltHead">
 	<div class="ltHead_cen">
@@ -10,7 +19,8 @@
 		<div class="ltForm appear">
 			{if condition="$data.img != null"}
 			<a href="{:url('Data/index')}">
-				<img src="http://localhost/Postbar/uploads/{$data.img}" class="image">
+				<!--<img src="http://localhost/Postbar/uploads/{$data.img}" class="image">-->
+				<img src="{$data.img}" class="image">
 			</a>
 			{/if}
 			<ul>

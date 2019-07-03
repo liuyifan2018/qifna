@@ -106,6 +106,7 @@ body{
     margin-left: 11px;
     margin-top: 14px;
     overflow: hidden;
+    border-radius: 50%;
 }
 .indexCon_msg_pic img{
     width: 46px;
