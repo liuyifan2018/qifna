@@ -6,6 +6,7 @@ function requestMethod(method,data) {
             method:method,
             body:JSON.stringify(data),
             headers: new Headers({
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             })
         };
@@ -13,10 +14,12 @@ function requestMethod(method,data) {
         request = {
             method:method,
             headers: new Headers({
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             })
         };
     }
+
     return request;
 }
 //请求处理

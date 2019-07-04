@@ -1,6 +1,6 @@
 {include file="../application/forum/view/public.html"/}
 {include file="../application/forum/view/fetch.html"/}
-	<title>论坛首页</title>
+<title>论坛首页</title>
 </head>
 <body>
 <div id="project">
@@ -17,12 +17,12 @@
 				<div class="indexCon_msg" v-for="list in lists">
 					<img :src="list.user_photo" class="indexCon_msg_pic">
 					<div class="indexCon_msg_detail">
-						<a href="">
-							<div class="indexCon_msg_detail_tittle">
-								<span>{{list.classify}}</span>
+						<div class="indexCon_msg_detail_tittle">
+							<span>{{list.classify}}</span>
+							<a v-on:click="noteInfo(list.id)">
 								<p>{{list.title}}</p>
-							</div>
-						</a>
+							</a>
+						</div>
 						<div class="havePic" v-if="list.img != ''">
 							<a v-bind:href="list.img" target="_blank">
 								<img :src="list.img" class="havePic_head"/>

@@ -2,10 +2,10 @@
 <header class="ltHead">
 	<div class="ltHead_cen" id="project">
 		<ul class="headNav">
-			<li><a href="{:url('Index/index')}">首页</a></li>
+			<li v-on:click="listsIndex"><a>首页</a></li>
 			{volist name="classify" id="vo"}
-				<li>
-					<a v-on:click="classify({$vo.id})">{$vo.title}</a>
+				<li v-on:click="classify({$vo.id})">
+					<a>{$vo.title}</a>
 				</li>
 			{/volist}
 		</ul>

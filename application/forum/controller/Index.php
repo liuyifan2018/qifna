@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpInconsistentReturnPointsInspection */
+
 /**
  * Created by PhpStorm.
  * User: Admin
@@ -34,6 +35,12 @@ class Index extends Controller{
 	protected $param;
 
 	/**
+	 * @var $classify
+	 * 分类
+	 */
+	protected $classify;
+
+	/**
 	 * @var array
 	 */
 	protected $map = [];
@@ -50,6 +57,8 @@ class Index extends Controller{
 			$this->data = $data;
 			$this->param = CURD::PurificationParam();
 			$this->map = ['is_show' => 1];
+			$this->classify = Note::classify($this->map);
+
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
 		}
@@ -71,10 +80,9 @@ class Index extends Controller{
 	 */
 	public function index(){
 		try{
-			$arrIfy = Note::classify($this->map);
 			$index = $this->model($this->data)->index();
 			return view('index',[
-				'classify' => $arrIfy,
+				'classify' => $this->classify,
 				'data'  =>  $this->data,
 				'index' =>  $index
 			]);
@@ -87,12 +95,13 @@ class Index extends Controller{
 	/**
 	 * @return \think\response\Json
 	 * @throws \Exception
+	 * 获取列表数据
 	 */
 	public function lists(){
-		if (Request::isGet()){
-			$classify = $this->param;
+		if (Request::isGet()) {
+			$classify = input('get.classify');
 			$lists = $this->model($this->data)->lists($classify);
-			$lists == [] ? []:$lists;
+			$lists == [] ? [] : $lists;
 			return $lists;
 		}
 	}

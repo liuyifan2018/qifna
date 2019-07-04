@@ -51,7 +51,7 @@ class IndexModel extends Model implements IndexFace {
 	 */
 	public function lists( $classify ){
 		if (!empty($classify)){
-			$lists = Db::name('forum_note')->where($this->map)->whereOr(['classify' => $classify])->select();
+			$lists = Db::name('forum_note')->where($this->map)->where(['classify' => $classify])->select();
 		}else{
 			$lists = Db::name('forum_note')->where($this->map)->select();
 		}
