@@ -11,6 +11,7 @@ use app\forum\model\NoteModel;
 use app\forum\Traits\Date;
 use app\forum\Traits\OutMsg;
 use think\Controller;
+use think\Db;
 use think\facade\Request;
 use app\forum\Traits\User;
 use app\forum\Traits\CURD;
@@ -85,10 +86,12 @@ class Note extends Controller {
 			if(Request::isGet()){
 				$data = input('get.id');
 				$noteInfo = $this->model($this->data)->note( $data );
+				$n_id = $noteInfo['note']['id'];
 				return view('note',[
 					'note'  =>  $noteInfo,
 					'classify'  =>  $this->classify,
-					'data'  =>  $this->data
+					'data'  =>  $this->data,
+					'n_id'  =>  $n_id
 				]);
 			}else{
 				$this->error('参数错误!');
@@ -164,6 +167,23 @@ class Note extends Controller {
 	}
 
 	/**
+	 * @return mixed|\think\response\Json
+	 * @throws \Exception
+	 * 评论列表
+	 */
+	public function commentLists(){
+		try{
+			if (Request::isGet()){
+				$n_id = input('get.n_id');
+				$Message = $this->model($this->data)->commentLists( $n_id );
+				return $Message;
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
+		}
+	}
+
+	/**
 	 * @return \think\response\Json
 	 * @throws \Exception
 	 * 评论帖子
@@ -173,6 +193,7 @@ class Note extends Controller {
 			if (Request::isPost()){
 				$data = $this->param;
 				$data['date'] = Date::getNowTime();
+				$data['username'] = $this->data['username'];
 				$data['is_show'] = 1;
 				$Message = $this->model($this->data)->content($data);
 				return $Message;
@@ -211,6 +232,25 @@ class Note extends Controller {
 				$data['date'] = Date::getNowTime();
 				$data['username'] = $this->data['username'];
 				$Message = $this->model($this->data)->report($data);
+				return $Message;
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * @return mixed|\think\response\Json|void
+	 * @throws \Exception
+	 * 收藏帖子
+	 */
+	public function collNote(){
+		try{
+			if (Request::isGet()){
+				$data = input('get.');
+				$data['date'] = Date::getNowTime();
+				$data['username'] = $this->data['username'];
+				$Message = $this->model($this->data)->collNote( $data );
 				return $Message;
 			}
 		}catch (\Exception $e){

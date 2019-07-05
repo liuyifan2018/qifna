@@ -1,11 +1,14 @@
 {include file="../application/forum/view/public.html"/}
 {include file="../application/forum/view/fetch.html"/}
+<script>
+    let n_id = {$n_id};
+</script>
 </head>
 <body>
-{include file="../application/forum/view/template.html"/}
+{include file="../application/forum/view/templateIndex.html"/}
 <div class="layui-hide-xs">
 </div>
-<div class="layui-container">
+<div class="layui-container" id="note">
 	<div class="layui-row layui-col-space15">
 		<div class="layui-col-md8 content detail">
 			<div class="fly-panel detail-box"><h1>{$note.note['title']}</h1>
@@ -13,100 +16,58 @@
 						class="layui-badge layui-bg-green fly-detail-column">            提问          </span> <span
 						class="layui-badge" style="background-color: #999;">未结</span> <span class="fly-list-nums">                        <a
 						href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> 1</a>                        <i
-						class="iconfont" title="人气">&#xe60b;</i> 23          </span></div>
+						class="iconfont" title="人气">&#xe60b;</i> {$note.note['num']}</span></div>
 				<div class="detail-about"><a class="fly-avatar" href="/u/42224448/"> <img
-						src="//res.layui.com/images/fly/avatar/2.jpg" alt="yyf2003_1"> </a>
-					<div class="fly-detail-user"><a href="/u/42224448/" class="fly-link"> <cite>yyf2003_1</cite> </a>
-						<span>2小时前</span></div>
-					<div class="detail-hits"><span style="padding-right: 10px; color: #FF7200">悬赏：20飞吻</span></div>
+						src="{$note.note['img']}" alt="yyf2003_1"> </a>
+					<div class="fly-detail-user"><a href="/u/42224448/" class="fly-link">
+						<cite>{$note.note['name']}</cite> </a>
+						<span>{:date('Y-m-d H:i:s',$note.note['date'])}</span></div>
+					<div class="detail-hits"><span style="padding-right: 10px; color: #FF7200">悬赏：{$note.note['money']}飞吻</span>
+					</div>
 				</div>
-				<div class="layui-btn-container fly-detail-admin" id="LAY_jieAdmin" data-id="54509">
-					<button class="layui-btn layui-btn-sm jie-admin jie-admin-collect" type="collect" data-type="add">
-						收藏
+				<div class="layui-btn-container fly-detail-admin" id="LAY_jieAdmin" data-id="54412">
+					<button class="layui-btn layui-btn-sm jie-admin jie-admin-collect" type="collect" data-type="add"
+							style="visibility: visible;"> 收藏
 					</button>
 				</div>
 				<div class="detail-body layui-text photos">
-					<table class="layui-table">
-						<tbody>
-						<tr>
-							<td>版本：layui</td>
-							<td>浏览器：</td>
-						</tr>
-						</tbody>
-					</table>
-					js动态生成的checkbox，如何监听选中事件呢？<br>var html = &quot;&quot;;<br>for (var i = 0; i &lt;
-					bcsSubjectJson.length; i++) {<br> html += &quot;&lt;input type=&#39;checkbox&#39; name=&#39;cbBCSSubject&#39;
-					value=&#39;&quot; + bcsSubjectJson[i].SubjectId + &quot;&#39; lay-skin=&#39;primary&#39; title=&#39;&quot;
-					+ bcsSubjectJson[i].SubjectName +&quot;&#39; lay- <br> lifter=&#39;cbBCSSubject&#39;/&gt;&quot;;<br>
-					}<br>$(&quot;#BCSSubjectDiv&quot;).html(html);<br><br><br>在form.on(&#39;checkbox(cbBCSSubject)&#39;,function(data){})里面不起作用，请问有什么办法吗？
+					{$note.note['content']}
 				</div>
 			</div>
 			<div class="fly-panel detail-box" id="flyReply">
 				<fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
 					<legend>回帖</legend>
 				</fieldset>
-				<ul class="jieda" id="jieda">
-					<li data-id="188320"><a name="item-1561962278158"></a>
-						<div class="detail-about detail-about-reply"><a class="fly-avatar" href="/u/26952240/"> <img
-								src="//cdn.layui.com/avatar/26952240.jpg?t=1547272823243" alt="上瘾446"> </a>
-							<div class="fly-detail-user"><a href="/u/26952240/" class="fly-link"> <cite>上瘾446</cite>
-							</a></div>
-							<div class="detail-hits"><span>32分钟前</span></div>
-						</div>
-						<div class="detail-body layui-text jieda-body photos"> 你可以在子类里面获取到值给某个参数，然后通过父层调用子层方法取到值</div>
-						<div class="jieda-reply"><span class="jieda-zan " type="zan">              <i
-								class="iconfont icon-zan"></i>              <em>0</em>            </span> <span
-								type="reply">              <i class="iconfont icon-svgmoban53"></i>              回复            </span>
-						</div>
-					</li>
-					<li data-id="188322"><a name="item-1561962803157"></a>
-						<div class="detail-about detail-about-reply"><a class="fly-avatar" href="/u/9111144/"> <img
-								src="//q.qlogo.cn/qqapp/101235792/8C652320D1AC2B19AB2CEFD6F95D6834/100" alt="飞翔的燕子">
-						</a>
-							<div class="fly-detail-user"><a href="/u/9111144/" class="fly-link"> <cite>飞翔的燕子</cite> </a>
+				<ul class="jieda" id="commentList" v-for="commentList in commentLists">
+					<li>
+						<div class="detail-about detail-about-reply">
+							<a class="fly-avatar" href="{:url('Data/user')}?username=commentList.username">
+								<img :src="commentList.img" alt="{{commentList.name}}"/> </a>
+							<div class="fly-detail-user">
+								<a href="{:url('Data/user')}?username=commentList.username" class="fly-link">
+									<cite>{{commentList.name}}</cite> <i class="layui-badge fly-badge-vip">{{commentList.insider}}</i> </a>
 							</div>
-							<div class="detail-hits"><span>23分钟前</span></div>
+							<div class="detail-hits">
+								<span>{{commentList.date}}</span>
+							</div>
 						</div>
-						<div class="detail-body layui-text jieda-body photos"> @<a href="javascript:;" class="fly-aite">上瘾446</a>
-							可有具体案例？
-						</div>
-						<div class="jieda-reply"><span class="jieda-zan " type="zan">              <i
-								class="iconfont icon-zan"></i>              <em>0</em>            </span> <span
-								type="reply">              <i class="iconfont icon-svgmoban53"></i>              回复            </span>
-						</div>
-					</li>
-					<li data-id="188324"><a name="item-1561963045176"></a>
-						<div class="detail-about detail-about-reply"><a class="fly-avatar" href="/u/24287592/"> <img
-								src="//cdn.layui.com/avatar/24287592.gif?t=1556521436711" alt="半桶水搬砖工"> </a>
-							<div class="fly-detail-user"><a href="/u/24287592/" class="fly-link"> <cite>半桶水搬砖工</cite>
-							</a></div>
-							<div class="detail-hits"><span>19分钟前</span></div>
-						</div>
-						<div class="detail-body layui-text jieda-body photos"> var iframeWin = layero.find('iframe')[0];
-							<br>var obj = iframeWin.contentWindow.func();<br>把这个写在你的回调里面，就是你按了确定或者关闭按钮的时候，然后在你的子页面里定义一个func方法，返回你需要的值，例如上面这个obj就是子页面返回的值
-						</div>
-						<div class="jieda-reply"><span class="jieda-zan " type="zan">              <i
-								class="iconfont icon-zan"></i>              <em>0</em>            </span> <span
-								type="reply">              <i class="iconfont icon-svgmoban53"></i>              回复            </span>
+						<div class="detail-body layui-text jieda-body photos">
+							{{commentList.content}}
 						</div>
 					</li>
 				</ul>
 				<div style="text-align: center"></div>
 				<a name="comment"> </a>
 				<div class="layui-form layui-form-pane">
-					<form action="/jie/reply/" method="post">
-						<div class="layui-form-item layui-form-text">
-							<div class="layui-input-block"><textarea id="L_content" name="content" required
-																	 lay-verify="required" placeholder="请输入内容"
-																	 class="layui-textarea fly-editor"
-																	 style="height: 150px;"></textarea></div>
+					<div class="layui-form-item layui-form-text">
+						<div class="layui-input-block">
+							<textarea id="content" placeholder="请输入内容" class="layui-textarea fly-editor"
+									  style="min-height: 150px;"></textarea>
 						</div>
-						<div class="layui-form-item"><input type="hidden" name="jid" value="54509"> <input type="hidden"
-																										   name="daPages"
-																										   value="1">
-							<button class="layui-btn" lay-filter="*" lay-submit>提交回复</button>
-						</div>
-					</form>
+					</div>
+					<div class="layui-form-item"><input type="hidden" name="jid" value="54509">
+						<button class="layui-btn" v-on:click="commentAdd({$note.note['id']})">提交回复</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -137,58 +98,16 @@
 				<div class="fly-panel-title"> 心级赞助商 <span style="padding: 0 3px;">-</span> <a href="/jie/15697/"
 																							  class="fly-link fly-joinad    ">我要加入</a>
 				</div>
-				<div class="fly-panel-main"><a href="https://coding.net/?utm_source=layui" target="_blank"
-											   rel="nofollow" class="fly-zanzhu fly-zanzhu-img"
-											   time-limit="2020-04-15 0:0:0" style="background: none;"> <img
-						src="//cdn.layui.com/upload/2019_5/168_1557540349142_16350.png" alt="CODING"> </a> <a
-						href="https://m3w.cn/track/uniapp/flyui" target="_blank" rel="nofollow"
-						class="fly-zanzhu fly-zanzhu-img" time-limit="2019-07-20 0:0:0" style="background: none;"> <img
-						src="//cdn.layui.com/upload/2019_6/168_1560843280736_51554.png" alt="dcloud"> </a> <a
-						href="https://www.renren.io/layui" target="_blank" rel="nofollow" class="fly-zanzhu"
-						style="background-color: #4BAE4F;" time-limit="2019-09-08 0:0:0"> 人人开源 - 企业级后台脚手架框架 </a> <a
-						href="https://www.apipost.cn/?fr=layui" target="_blank" rel="nofollow"
-						class="fly-zanzhu fly-zanzhu-img" time-limit="2019-07-14 0:0:0" style="background: none;"> <img
-						src="//cdn.layui.com/upload/2019_4/168_1556102263551_83262.png" alt="apipost"> </a> <a
-						href="https://www.maoyuncloud.com/?from=layui" target="_blank" class="fly-zanzhu"
-						time-limit="2019-09-01" style="background-color: #0063FF;">猫云 - 可信赖的融合云计算服务商</a> <a
-						href="http://www.thisfx.com?from=layui" target="_blank" class="fly-zanzhu"
-						time-limit="2019-07-14" style="background-color: #20222A;">FxAdmin - 企业管理系统快速开发套件</a> <a
-						href="https://www.chanyoo.net/layui.html" target="_blank" class="fly-zanzhu"
-						time-limit="2019-07-26" style="background-color: #1D1737;">10年短信服务商价格实惠接入方便</a> <a
-						href="https://imgcook.taobao.org/?from=layui" target="_blank" class="fly-zanzhu fly-zanzhu-img"
-						time-limit="2019-07-14" style="background: none;"> <img
-						src="//cdn.layui.com/upload/2019_6/168_1561515392772_2750.jpg" alt="imgcook"> </a> <a
-						href="http://www.yixiekeji.com/" target="_blank" class="fly-zanzhu fly-zanzhu-img"
-						time-limit="2019-07-30" style="background: none;"> <img
-						src="//cdn.layui.com/upload/2019_6/168_1561705136068_74941.jpg" alt="yixiekeji"> </a></div>
 			</div>
 			<div class="fly-panel">
 				<div class="fly-panel-title"> 官方产品</div>
-				<div class="fly-panel-main"><a href="http://www.layui.com/admin/?from=fly" target="_blank"
-											   class="fly-zanzhu" time-limit="2017.09.25-2099.01.01"
-											   style="background-color: #20222A; background-image: linear-gradient(to right,#20222A,#3E4251);">layuiAdmin
-					- layui 官方后台管理模板</a> <a href="http://layim.layui.com/?from=fly" target="_blank" class="fly-zanzhu"
-											time-limit="2017.09.25-2099.01.01"
-											style="background-color: #009688; background-image: linear-gradient(to right,#009688,#5FB878);">LayIM
-					- layui 即时通讯旗舰之作</a></div>
 			</div>
-			<div class="fly-panel" style="padding: 20px 0; text-align: center;"><img
-					src="//cdn.layui.com/upload/2017_8/168_1501894831075_19619.jpg" style="max-width: 100%;"
-					alt="layui">
-				<p style="position: relative; color: #666;">微信扫码关注 layui 公众号</p></div>
+			<div class="fly-panel" style="padding: 20px 0; text-align: center;">
+			</div>
 		</div>
 	</div>
 </div>
-<div class="fly-footer"><p><a href="http://fly.layui.com/">Fly 社区</a> 2019 &copy; <a href="http://www.layui.com/">layui.com</a>
-</p>
-	<p><a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a> <a href="/extend/" target="_blank">组件平台</a> <a
-			href="/store/" target="_blank">模板市场</a> <a href="/case/2019/" target="_blank">年度案例</a> <a
-			href="http://fly.layui.com/jie/2461/" target="_blank">公众号</a></p>
-	<div class="fly-union"><p style="display: block; margin-bottom: 10px;"><span>感谢以下服务商提供云加速赞助</span>
-		<p><a href="https://console.upyun.com/register/?invite=SJ0wu6g2-" target="_blank" rel="nofollow" upyun> <img
-				src="//res.layui.com/static/images/other/upyun.png?t=1"> </a> <a
-				href="https://www.maoyuncloud.com/?from=layui" target="_blank" rel="nofollow" maoyun> <img
-				src="//cdn.layui.com/upload/2019_5/168_1559291577683_9348.png" style="width: 80px;"> </a></div>
-</div>
+<div class="fly-footer"></div>
 </body>
 </html>
+<script src="http://localhost/Qifan/public/static/js/forum/Note/note.js"></script>

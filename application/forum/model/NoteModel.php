@@ -42,6 +42,11 @@ class NoteModel extends BaseModel implements NoteFace {
 	{
 		if (empty($id)) throw new \Exception('帖子不存在!');
 		$note['note'] = $this->superInfo( $id ,''); //获取帖子信息
+		$user = Db::name('user')->where(['username' => $note['note']['username']])->field('username,insider,name,img')->find();
+		$note['note']['username'] = $user['username'];
+		$note['note']['insider'] = $user['insider'];
+		$note['note']['name'] = $user['name'];
+		$note['note']['img'] = $user['img'];
 		Db::name('forum_note')->where(array('id' => $id))->setInc('num');    //增加浏览量
 		return $note;
 	}
@@ -135,6 +140,28 @@ class NoteModel extends BaseModel implements NoteFace {
 	}
 
 	/**
+	 * @param $n_id
+	 * @return mixed
+	 * @throws \Exception
+	 * 评论列表
+	 */
+	public function commentLists( $n_id ){
+		$this->is_empty( $n_id );
+		$commentLists = Db::name('forum_content')->where(['n_id' => $n_id,'is_show' => 1])->select();
+		if ($commentLists != []){
+			foreach ($commentLists as $k => $v) {
+				$user = Db::name('user')->where(['username' => $v['username']])->field('insider,name,img')->find();
+				$commentLists[$k]['insider'] = $user['insider'];
+				$commentLists[$k]['name'] = $user['name'];
+				$commentLists[$k]['img'] = $user['img'];
+				$commentLists[$k]['date'] = date('Y-m-d H:i:s',$commentLists[$k]['date']);
+			}
+		}
+		$commentLists == []? []:$commentLists;
+		return OutMsg::outSuccessMsg($commentLists);
+	}
+
+	/**
 	 * @param $data
 	 * @return mixed
 	 * @throws \Exception
@@ -199,5 +226,29 @@ class NoteModel extends BaseModel implements NoteFace {
 			return OutMsg::outErrorMsg('举报失败!');
 		}
 		return OutMsg::outSuccessMsg('举报成功!');
+	}
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * @throws \Exception
+	 */
+	public function collNote( $data ){
+		$this->is_empty($data['n_id']);
+		$map = [
+			'username'  =>  $this->data['username'],
+			'n_id'  =>  $data['n_id'],
+		];
+		$is_coll = Db::name('forum_coll')->where($map)->find();
+		$is_coll['coll'] == 1?$type = 2: $type = 1;
+		if (empty($is_coll)){
+			$coll = Db::name('forum_coll')->insert($data);
+		}else{
+			$coll = Db::name('forum_coll')->where(['username' => $this->data['username'],'n_id' => $data['n_id']])->update(['coll' => $type]);
+		}
+		if ($coll === false){
+			return OutMsg::outErrorMsg('操作失败!');
+		}
+		return OutMsg::outSuccessMsg('操作成功!');
 	}
 }

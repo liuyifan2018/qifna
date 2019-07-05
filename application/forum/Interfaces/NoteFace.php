@@ -44,6 +44,13 @@ interface NoteFace{
 	public function superInfo( $id,$value );
 
 	/**
+	 * @param $n_id
+	 * @return mixed
+	 * 评论列表
+	 */
+	public function commentLists($n_id);
+
+	/**
 	 * @param $data
 	 * @return mixed
 	 * 评论
@@ -63,5 +70,12 @@ interface NoteFace{
 	 * 举报
 	 */
 	public function report($data);
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * 收藏帖子
+	 */
+	public function collNote($data);
 
 }

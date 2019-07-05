@@ -1,3 +1,69 @@
+let note = new Vue({
+    el:'#note',
+    data:{
+        commentLists:[]
+    },
+    created:function () {
+        this.commentList();
+    },
+    methods:{
+        commentList:function(){
+            try {
+                $.ajax({
+                    url:'commentLists',
+                    type:'GET',
+                    data:{
+                        n_id:n_id
+                    },
+                    success:function(res){
+                        for (let i = 0; i < res.msg.length; i++){
+                            note.commentLists.push(res.msg[i])
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                        layer.msg(err,{icon:5});
+                    }
+                })
+            }catch (err) {
+                console.log(err);
+                layer.msg(err);
+            }
+        },
+        commentAdd:function (n_id) {
+            try {
+                is_empty(n_id);
+                let content = $("#content").val();
+                let arr = [content];
+                processing(arr);
+                let data = {
+                    n_id:n_id,
+                    content:content
+                };
+                let request = requestMethod('POST',data);
+                fetch('content',request)
+                    .then(requestHandle)
+                    .then(res => {
+                        $("#content").val('');
+                        note.commentLists = [];
+                        this.commentList();
+                        $("#commentList").load(location.href+ " #commentList");
+                        layer.open({
+                            title:'提示信息',
+                            content:res.msg,
+                            yes:function (index) {
+                                layer.close(index);
+                            }
+                        })
+                    })
+                    .catch(requestError);
+            }catch (err) {
+                console.log(err);
+                layer.msg(err,{icon:5});
+            }
+        }
+    }
+});
 function addNote() {
     try {
         let title = $("#title").val();

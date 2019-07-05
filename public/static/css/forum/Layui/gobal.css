@@ -1414,10 +1414,6 @@ body .layui-edit-face .layui-layer-content {
     border-bottom: 1px dotted #DFDFDF;
 }
 
-.jieda > li:last-child {
-    border-bottom: none;
-}
-
 .jieda .fly-none {
     height: 50px;
     min-height: 0;
