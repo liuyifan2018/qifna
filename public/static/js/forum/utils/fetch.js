@@ -34,6 +34,7 @@ function requestHandle(res) {
 
 //请求错误信息
 function requestError(error) {
+    console.log(error);
     if (error instanceof Object) {  //layer不支持返回的object错误
         alert(error);
     }else{

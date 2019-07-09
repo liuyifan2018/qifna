@@ -10,8 +10,7 @@ use app\forum\Interfaces\IndexFace;
 use app\forum\Traits\Note;
 use app\forum\Traits\OutMsg;
 use think\Db;
-use think\Model;
-class IndexModel extends Model implements IndexFace {
+class IndexModel extends BaseModel implements IndexFace {
 
 	/**
 	 * @var $data

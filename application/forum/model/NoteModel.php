@@ -47,6 +47,7 @@ class NoteModel extends BaseModel implements NoteFace {
 		$note['note']['insider'] = $user['insider'];
 		$note['note']['name'] = $user['name'];
 		$note['note']['img'] = $user['img'];
+		$note['good'] = Db::name('forum_good')->where(['n_id' => $id])->count();    //点赞总数
 		Db::name('forum_note')->where(array('id' => $id))->setInc('num');    //增加浏览量
 		return $note;
 	}
@@ -213,6 +214,7 @@ class NoteModel extends BaseModel implements NoteFace {
 	{
 		$this->is_empty($data['n_id']);
 		if (strlen($data['content']) < 10 || strlen($data['content']) > 255) return OutMsg::outErrorMsg('举报内容限制在10-255字内');
+		if ($data['username'] == $data['noteUser']) return OutMsg::outErrorMsg('不能举报自己!');
 		$map = [
 			'username' => $this->data['username'],
 			'n_id'  =>  $data['n_id']
