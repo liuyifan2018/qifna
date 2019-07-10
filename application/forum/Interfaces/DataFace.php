@@ -45,4 +45,38 @@ interface DataFace{
 	 * 上传头像
 	 */
 	public function upImage($uid,$image);
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * 修改密码
+	 */
+	public function updatePass( $data );
+
+	/**
+	 * @return mixed
+	 * 我的帖子
+	 */
+	public function note();
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * 是否隐藏
+	 */
+	public function is_show( $data );
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * 充值
+	 */
+	public function recharge( $data );
+
+	/**
+	 * @param $data
+	 * @return mixed
+	 * 开通会员
+	 */
+	public function insider( $data );
 }

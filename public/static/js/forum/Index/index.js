@@ -14,7 +14,9 @@ let project = new Vue({
                     .then(requestHandle)
                     .then(res => {
                         project.lists = [];
-                        this.forRes(res.msg);
+                        if (res.msg != []){
+                            this.forRes(res.msg);
+                        }
                     })
                     .catch(requestError);
             } catch (err) {
@@ -31,23 +33,15 @@ let project = new Vue({
                     data: data,
                     success: function (res) {
                         project.lists = [];
-                        that.forRes(res.msg);
+                        if (res.msg != []){
+                            that.forRes(res.msg);
+                        }
                     },
                     error: function (err) {
                         console.log(err);
                         layer.msg(err, {icon: 5});
                     }
                 });
-                // let request = requestMethod('POST',data);
-                // fetch('lists',request)
-                //     .then(requestHandle)
-                //     .then(res => {
-                //         for (let i = 0; i < res.msg.length; i++){
-                //             project.lists.push(res.msg.lists[i]);
-                //         }
-                //     })
-                //     .catch(requestError);
-                //fetch请求，后台接收不到参数
             } catch (err) {
                 console.log(err);
                 layer.msg(err, {icon: 5});

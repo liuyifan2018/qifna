@@ -13,6 +13,7 @@ function signed(username,money) {
                     title:'提示信息',
                     content:res.msg,
                     yes:function(index){
+                        window.location.reload();
                         layer.close(index);
                     }
                 })

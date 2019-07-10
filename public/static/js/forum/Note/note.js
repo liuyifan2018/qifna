@@ -5,7 +5,7 @@ let note = new Vue({
     },
     created: function () {
         let url = window.location.href;
-        if (url != "http://localhost/Qifan/public/index.php/forum/note/addnote.html"){
+        if (url != "http://localhost/Qifan/public/index.php/forum/note/addnote.html") {
             this.commentList();
         }
     },
@@ -19,8 +19,10 @@ let note = new Vue({
                         n_id: n_id
                     },
                     success: function (res) {
-                        for (let i = 0; i < res.msg.length; i++) {
-                            note.commentLists.push(res.msg[i])
+                        if (res.code != 0) {
+                            for (let i = 0; i < res.msg.length; i++) {
+                                note.commentLists.push(res.msg[i])
+                            }
                         }
                     },
                     error: function (err) {
@@ -62,9 +64,41 @@ let note = new Vue({
             } catch (err) {
                 layer.msg(err, {icon: 5});
             }
+        },
+        collNote: function (n_id) {
+            try {
+                is_empty(n_id);
+                $.ajax({
+                    url: 'collNote',
+                    type: 'GET',
+                    data: {
+                        n_id: n_id
+                    },
+                    success: function (res) {
+                        $("#coll").load(location.href + " #coll");
+                        if (res.code == 1) {
+                            layer.msg(res.msg, {icon: 1});
+                        } else {
+                            layer.open({
+                                title: '提示信息',
+                                content: res.msg,
+                                yes: function (index) {
+                                    layer.close(index)
+                                }
+                            })
+                        }
+                    },
+                    error: function (err) {
+                        layer.msg(err, {icon: 5})
+                    }
+                })
+            } catch (err) {
+                layer.msg(err, {icon: 5});
+            }
         }
     }
 });
+
 function addNote() {
     try {
         let title = $("#title").val();
@@ -99,7 +133,8 @@ function addNote() {
         layer.msg(err, {icon: 5});
     }
 }
-function editNote(id){
+
+function editNote(id) {
     try {
         is_empty(id);
         let title = $("#title").val();
@@ -134,12 +169,13 @@ function editNote(id){
         layer.msg(err, {icon: 5});
     }
 }
-function delNote(id){
+
+function delNote(id) {
     try {
         is_empty(id);
         $.ajax({
-            url:'delNote',
-            method:'GET',
+            url: 'delNote',
+            method: 'GET',
         });
         let data = {id: id};
         let request = requestMethod('GET', data);
@@ -160,39 +196,42 @@ function delNote(id){
         layer.msg(err, {icon: 5});
     }
 }
-function Report(username,noteUser,nid) {
+
+function Report(username, noteUser, nid) {
     try {
         is_empty(nid);
         let port = $('#port').val();
         let arr = [port];
         processing(arr);
         let data = {
-            username:username,
-            noteUser:noteUser,
-            n_id:nid,
-            content:port
+            username: username,
+            noteUser: noteUser,
+            n_id: nid,
+            content: port
         };
-        let request = requestMethod('POST',data);
-        fetch('report',request)
+        let request = requestMethod('POST', data);
+        fetch('report', request)
             .then(requestHandle)
             .then(res => {
                 layer.open({
-                    title:'提示信息',
-                    content:res.msg,
-                    yes:function (index) {
+                    title: '提示信息',
+                    content: res.msg,
+                    yes: function (index) {
                         layer.close(index);
                     }
                 })
             })
             .catch(requestError);
-    }catch (err) {
+    } catch (err) {
         console.log(err);
-        layer.msg(err, {icon : 5});
+        layer.msg(err, {icon: 5});
     }
 }
+
 function setReport() {
     document.getElementById('Report').style.display = "block";
 }
+
 function getReport() {
     document.getElementById('Report').style.display = "none";
 }

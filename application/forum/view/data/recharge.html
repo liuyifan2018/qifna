@@ -1,0 +1,60 @@
+{include file="../application/forum/view/public.html" /}
+{include file="../application/forum/view/fetch.html" /}
+<title>{$title} - 创新论坛</title>
+</head>
+<body>
+{include file="../application/forum/view/templateIndex.html" /}
+<div class="layui-container fly-marginTop fly-user-main">
+	{include file="../application/forum/view/data.html" /}
+	<div class="site-tree-mobile layui-hide">
+		<i class="layui-icon"></i>
+	</div>
+	<div class="site-mobile-shade"></div>
+	<div class="fly-panel fly-panel-user" pad20="" id="recharge">
+		<div class="layui-tab layui-tab-brief" lay-filter="user">
+			<ul class="layui-tab-title" id="LAY_mine">
+				<li v-for="tabBar in tabBars" :class="tabBar.active" v-on:click="setTab(tabBar.id)">
+					<a>{{tabBar.title}}</a>
+				</li>
+			</ul>
+			<div class="layui-tab-content" style="padding: 20px 0;">
+
+				<div class="layui-form layui-form-pane layui-tab-item layui-show" v-if="tabBars[0].active == 'layui-this'">
+					<div class="layui-form-item">
+						<label for="L_email" class="layui-form-label">选择开通</label>
+						<div class="layui-input-block">
+							<select class="diy-select" name="class" id="insider" v-on:click="Money">
+								<option value=""></option>
+								<option value="0">普通会员</option>
+								<option value="1">黄金会员</option>
+								<option value="2">钻石会员</option>
+								<option value="3">至尊会员</option>
+							</select>
+							<span style="color: #5FB878" id="zed"></span>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<button class="layui-btn" v-on:click="insider">确认开通</button>
+					</div>
+				</div>
+
+				<div id="likeCode" class="layui-form layui-form-pane layui-tab-item layui-show" v-if="tabBars[1].active == 'layui-this'">
+					<div class="layui-form-item">
+						<label for="L_email" class="layui-form-label">充值</label>
+						<div class="layui-input-inline">
+							<input type="text" id="money" name="money" value="" lay-verify="phone" autocomplete="off" class="layui-input"/>
+						</div>
+						<span style="color: red;" id="kda"></span>
+					</div>
+					<div class="layui-form-item">
+						<button class="layui-btn" v-on:click="recharge">确认充值</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="http://localhost/Qifan/public/static/js/forum/Data/recharge.js"></script>

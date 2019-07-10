@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpInconsistentReturnPointsInspection */
+
 /**
  * Created by PhpStorm.
  * User: Admin
@@ -205,11 +206,91 @@ class Data extends Controller{
 		}
 	}
 
+	/**
+	 * @return mixed|\think\response\Json
+	 * @throws \Exception
+	 */
 	public function updatePass(){
 		try{
 			if (Request::isPost()){
 				$data = $this->param;
 				$Message = $this->model($this->data)->updatePass( $data );
+				return $Message;
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * @return \think\response\View
+	 * 我的帖子
+	 */
+	public function note(){
+		try{
+			$note = "";
+			if (Request::isGet()){
+				$note = $this->model($this->data)->note();
+			}
+			return view('note',[
+				'note'  =>  $note,
+				'title' =>  '我的帖子',
+				'data'  =>  $this->data,
+				'classify'  => $this->classify
+			]);
+		}catch (\Exception $e){
+			$this->error( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * @return mixed|\think\response\Json
+	 * @throws \Exception
+	 * 是否显示
+	 */
+	public function is_show(){
+		try{
+			if (Request::isGet()){
+				$data = input('get.');
+				$Message = $this->model($this->data)->is_show($data);
+				return $Message;
+			}
+		}catch (\Exception $e){
+			return OutMsg::outAbnormalMsg($e->getMessage());
+		}
+	}
+
+	/**
+	 * @return mixed|\think\response\View|void
+	 * 充值余额
+	 */
+	public function recharge(){
+		try{
+			if (Request::isPost()){
+				$data = $this->param;
+				$Message = $this->model($this->data)->recharge($data);
+				return $Message;
+			}
+			return view('recharge',[
+				'title' => '充值中心',
+				'classify'   => $this->classify,
+				'data'  =>  $this->data
+			]);
+		}catch (\Exception $e){
+			$this->error( $e->getMessage() );
+		}
+	}
+
+	/**
+	 * @return mixed|\think\response\Json|void
+	 * @throws \Exception
+	 * 开通会员
+	 */
+	public function insider(){
+		try{
+			if (Request::isPost()){
+				$data = $this->param;
+				$Message = $this->model($this->data)->insider($data);
 				return $Message;
 			}
 		}catch (\Exception $e){

@@ -47,6 +47,7 @@ class NoteModel extends BaseModel implements NoteFace {
 		$note['note']['insider'] = $user['insider'];
 		$note['note']['name'] = $user['name'];
 		$note['note']['img'] = $user['img'];
+		$note['coll'] = Db::name('forum_coll')->where(['id' => $id,'username' => $this->data['username'],'coll' => 1])->find();   //检查是否已经收藏过
 		$note['good'] = Db::name('forum_good')->where(['n_id' => $id])->count();    //点赞总数
 		Db::name('forum_note')->where(array('id' => $id))->setInc('num');    //增加浏览量
 		return $note;
