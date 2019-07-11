@@ -41,11 +41,6 @@ class Index extends Controller{
 	protected $classify;
 
 	/**
-	 * @var array
-	 */
-	protected $map = [];
-
-	/**
 	 * 初始化
 	 */
 	public function initialize()
@@ -56,8 +51,7 @@ class Index extends Controller{
 			$this->model = new IndexModel($data);
 			$this->data = $data;
 			$this->param = CURD::PurificationParam();
-			$this->map = ['is_show' => 1];
-			$this->classify = Note::classify($this->map);
+			$this->classify = Note::classify();
 
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );

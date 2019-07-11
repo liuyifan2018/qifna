@@ -46,11 +46,6 @@ class Note extends Controller {
 	protected $classify;
 
 	/**
-	 * @var array
-	 */
-	protected $map = [];
-
-	/**
 	 * 初始化
 	 */
 	public function initialize()
@@ -61,8 +56,7 @@ class Note extends Controller {
 			$this->model = new NoteModel( $data );
 			$this->param = CURD::PurificationParam();
 			$this->data = $data;
-			$this->map = ['is_show' => 1];
-			$this->classify = \app\forum\Traits\Note::classify($this->map);
+			$this->classify = \app\forum\Traits\Note::classify();
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
 		}

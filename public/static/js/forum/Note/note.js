@@ -173,10 +173,7 @@ function editNote(id) {
 function delNote(id) {
     try {
         is_empty(id);
-        $.ajax({
-            url: 'delNote',
-            method: 'GET',
-        });
+
         let data = {id: id};
         let request = requestMethod('GET', data);
         fetch('delNote', request)

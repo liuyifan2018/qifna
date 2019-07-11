@@ -11,11 +11,11 @@ use think\Db;
 trait Note{
 
 	/**
-	 * @param $map
 	 * @return mixed
 	 * 分类
 	 */
-	public static function classify($map){
+	public static function classify(){
+		$map = ['is_show' => 1];
 		$classify = Db::name('forum_classify')->where($map)->order('sort asc,id desc')->limit(7)->select();
 		empty($classify) ? [] : $classify;
 		return $classify;

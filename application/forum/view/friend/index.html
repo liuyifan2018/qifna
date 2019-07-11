@@ -1,0 +1,170 @@
+{include file="../application/forum/view/public.html" /}
+{include file="../application/forum/view/fetch.html" /}
+<title>{$title} - 创新论坛</title>
+<style>
+	table{
+		margin:10px;
+	}
+	table ul{
+		padding: 10px 10px;
+	}
+</style>
+</head>
+<body>
+{include file="../application/forum/view/template.html" /}
+<div class="layui-container fly-marginTop fly-user-main">
+	{include file="../application/forum/view/data.html" /}
+	<div class="site-tree-mobile layui-hide">
+		<i class="layui-icon"></i>
+	</div>
+	<div class="site-mobile-shade"></div>
+	<div class="fly-panel fly-panel-user" pad20="" id="friends">
+		<div class="layui-tab layui-tab-brief" lay-filter="user">
+			<ul class="layui-tab-title" id="LAY_mine">
+				<li v-for="tabBar in tabBars" :class="tabBar.active" v-on:click="setTab(tabBar.id)">
+					<a>{{tabBar.title}}</a>
+				</li>
+				<li><a href="{:url('Friend/message')}">消息列表</a></li>
+			</ul>
+			<div class="layui-tab-content" style="padding: 20px 0;">
+
+				<div class="layui-tab-item layui-show" v-if="tabBars[0].active == 'layui-this'">
+					<table class="layui-hide" id="LAY_mySendCard"></table>
+					<div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" lay-id="LAY_mySendCard" style=" ">
+						<div class="layui-table-box">
+							<div class="layui-table-header">
+								<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+									<thead>
+									<tr>
+										<th data-field="title" data-key="1-0-0" data-minwidth="300" class="">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+												<span>用户昵称</span>
+											</div></th>
+										<th data-field="status" data-key="1-0-1" class="">
+											<div class="layui-table-cell laytable-cell-1-0-4" align="center">
+												<span>状态</span>
+											</div></th>
+										<th data-field="time" data-key="1-0-3" class="">
+											<div class="layui-table-cell laytable-cell-1-0-4" align="center">
+												<span>添加时间</span>
+											</div></th>
+										<th data-field="4" data-key="1-0-4" class=" layui-table-col-special">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+												<span>会员</span>
+											</div></th>
+										<th data-field="5" data-key="1-0-5" class=" layui-table-col-special">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+												<span>操作</span>
+											</div>
+										</th>
+									</tr>
+									</thead>
+								</table>
+							</div>
+
+							<div class="layui-table-body layui-table-main" v-if="is_show == 1">
+								<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+									<tbody>
+									<tr data-index="0" class="">
+										<td data-field="title" data-key="1-0-0" data-content="11" data-minwidth="300" class="">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+												<a href="{:url('Data/user')}?username=11" target="_blank" class="layui-table-link">11</a>
+											</div></td>
+										<td data-field="status" data-key="1-0-1" align="center" data-content="0" class="">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+                                                    <span style="color: #999;">
+                                                        11
+                                                    </span>
+											</div></td>
+										<td data-field="time" data-key="1-0-3" align="center" data-content="1541990727246" class="">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+												11
+											</div></td>
+										<td data-field="4" data-key="1-0-4" data-content="" class="layui-table-col-special">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+												<span style="font-size: 12px;">11</span>
+											</div></td>
+										<td data-field="5" data-key="1-0-5" data-content="" class="layui-table-col-special">
+											<div class="layui-table-cell laytable-cell-1-0-4">
+												<a class="layui-btn layui-btn-xs" href="{:url('Friend/message')}?friend=11">
+													发信息
+												</a>
+												<a class="layui-btn layui-btn-xs" href="javascript:delFriend(11)">
+													删除
+												</a>
+											</div></td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="layui-table-body layui-table-main" v-if="is_show == 2">
+								<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+									<tbody></tbody>
+								</table>
+								<a v-on:click="setTab(1)" style="cursor: pointer">
+									<div class="layui-none" style="color:#128BCD">
+										无好友,赶快添加吧!
+									</div>
+								</a>
+							</div>
+
+						</div>
+						<style>.laytable-cell-1-0-4{ width: 181px; }</style>
+					</div>
+				</div>
+
+				<div class="layui-form layui-form-pane layui-tab-item layui-show" v-if="tabBars[1].active == 'layui-this'">
+					<div class="layui-form-item">
+						<label for="L_pass" class="layui-form-label">用户账号</label>
+						<div class="layui-input-inline">
+							<input type="text" id="friend" required="" lay-verify="required" autocomplete="off" class="layui-input" />
+						</div>
+						<div class="layui-form-mid layui-word-aux">
+							<span id="error" style="color: red"></span>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<button class="layui-btn" v-on:click="searchFriend">搜索</button>
+					</div>
+					<table id="content" border="1"></table>
+					<div class="layui-form-item" id="getFriend" style="display:none;border: 1px solid #E6E6E6">
+						<ul style="padding: 15px">
+							<li>昵称: <a href="{:url('Data/user')}?username={{friendInfo.username}}">{{friendInfo.name}}</a></li>
+							<li>会员: {{friendInfo.insider}}</li>
+							<li>状态: {{friendInfo.state}}</li>
+							<li>个性签名: {{friendInfo.auto}}</li>
+						</ul>
+						<button style="margin-bottom: 10px;margin-left: 10px" class='layui-btn' v-on:click="addFriend(friendInfo.username)">添加好友</button>
+					</div>
+				</div>
+
+
+				<div class="layui-form layui-form-pane layui-tab-item layui-show" v-if="tabBars[2].active == 'layui-this'">
+					<div class="layui-form-item">
+						<label for="L_pass" class="layui-form-label">新密码</label>
+						<div class="layui-input-inline">
+							<input type="password" id="pass" name="pass" required="" lay-verify="required" autocomplete="off" class="layui-input" />
+						</div>
+						<div class="layui-form-mid layui-word-aux">
+							6到16个字符
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label for="L_repass" class="layui-form-label">确认密码</label>
+						<div class="layui-input-inline">
+							<input type="password" id="repass" name="repass" required="" lay-verify="required" autocomplete="off" class="layui-input" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<button class="layui-btn" onclick="upPass()">确认修改</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="http://localhost/Qifan/public/static/js/forum/Friend/friend.js"></script>

@@ -13,7 +13,7 @@ let recharge = new Vue({
                 active: ''
             }
         ],
-        money:'1'
+        money:''
     },
     created: function () {
         this.setTab(0);
@@ -68,8 +68,8 @@ let recharge = new Vue({
                 fetch('recharge', request)
                     .then(requestHandle)
                     .then(res => {
-                        $("#likeCode").load(location.href + " #likeCode");
                         if (res.code == 1) {
+                            recharge.money = "";
                             layer.msg(res.msg, {icon: 1});
                         } else {
                             layer.open({

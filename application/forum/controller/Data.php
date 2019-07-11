@@ -33,11 +33,6 @@ class Data extends Controller{
 	protected $classify;
 
 	/**
-	 * @var array
-	 */
-	protected $map = [];
-
-	/**
 	 * @var $param
 	 * 接收参数
 	 */
@@ -63,8 +58,7 @@ class Data extends Controller{
 			$this->model = new DataModel($data);
 			$this->data = $data;
 			$this->param = CURD::PurificationParam();
-			$this->map = ['is_show' => 1];
-			$this->classify = Note::classify($this->map);
+			$this->classify = Note::classify();
 		}catch (\Exception $e){
 			$this->error( $e->getMessage() );
 		}
