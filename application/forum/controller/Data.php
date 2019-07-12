@@ -11,15 +11,13 @@ namespace app\forum\controller;
 use app\forum\model\DataModel;
 use app\forum\Traits\Date;
 use app\forum\Traits\OutMsg;
-use think\Controller;
 use think\Db;
 use think\facade\Request;
 use app\forum\Traits\Note;
 use app\forum\Traits\CURD;
 use app\forum\Traits\User;
 
-class Data extends Controller{
-
+class Data extends Base {
 	/**
 	 * @var $model
 	 * 公共模型

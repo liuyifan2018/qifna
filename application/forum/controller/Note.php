@@ -10,13 +10,11 @@ namespace app\forum\controller;
 use app\forum\model\NoteModel;
 use app\forum\Traits\Date;
 use app\forum\Traits\OutMsg;
-use think\Controller;
-use think\Db;
 use think\facade\Request;
 use app\forum\Traits\User;
 use app\forum\Traits\CURD;
 
-class Note extends Controller {
+class Note extends Base {
 	/**
 	 * 帖子操作控制器
 	 */

@@ -10,12 +10,11 @@ namespace app\forum\controller;
 use app\forum\model\FriendModel;
 use app\forum\Traits\CURD;
 use app\forum\Traits\OutMsg;
-use think\Controller;
 use app\forum\Traits\User;
 use app\forum\Traits\Note;
 use think\facade\Request;
 
-class Friend extends Controller{
+class Friend extends Base{
 
 	/**
 	 * @var $data

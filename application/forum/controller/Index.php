@@ -9,12 +9,11 @@
 namespace app\forum\controller;
 use app\forum\model\IndexModel;
 use app\forum\Traits\CURD;
-use think\Controller;
 use think\facade\Request;
 use app\forum\Traits\User;
 use app\forum\Traits\Note;
 
-class Index extends Controller{
+class Index extends Base{
 
 	/**
 	 * @var $data
