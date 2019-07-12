@@ -81,6 +81,7 @@ class MessageModel extends BaseModel implements MessageFace
 	 * @param $data
 	 * @return mixed
 	 * @throws \Exception
+	 * 操作好友请求状态
 	 */
 	public function AgreeFriend($data)
 	{
