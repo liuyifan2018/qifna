@@ -1,0 +1,110 @@
+{include file="../application/forum/view/public.html" /}
+{include file="../application/forum/view/fetch.html" /}
+<title>{$title} - Fly社区</title>
+<style>
+	.Progress{
+		background: #009688;
+		height: 20px;
+	}
+	.Progress center{
+		color: black;
+	}
+	.lihe{
+		height: 50px;
+		width: 50px;
+	}
+</style>
+</head>
+<body>
+{include file="../application/forum/view/templateIndex.html" /}
+<div class="layui-container fly-marginTop fly-user-main">
+	{include file="../application/forum/view/data.html" /}
+	<div class="site-tree-mobile layui-hide">
+		<i class="layui-icon"></i>
+	</div>
+	<div class="site-mobile-shade"></div>
+	<div class="fly-panel fly-panel-user" pad20="" style="padding-top:20px;" id="task">
+		<div class="fly-msg" style="margin-bottom: 20px;">
+			<div class="Progress" v-if="task['width'] < 100" v-bind:style="width">
+				<center>{{task.width}}%</center>
+			</div>
+			<center v-if="task['width'] == 100">
+				<a v-on:click="getReward">
+					领取奖励
+				</a>
+			</center>
+		</div>
+		<div class="layui-row layui-col-space20" style="max-height: 500px;overflow: auto">
+			<ul class="mine-msg">
+				<li>	<!--signed-->
+					<blockquote class="layui-elem-quote">
+						<a href="{:url('Data/index')}"><cite>每日签到</cite></a> 20%
+					</blockquote>
+					<p>
+						<block v-if="task['signed'] == 1">
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-dange fly-delete">已完成</a>
+						</block>
+						<block v-else>
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">未完成</a>
+						</block>
+					</p>
+				</li>
+				<li>	<!--note-->
+					<blockquote class="layui-elem-quote">
+						<a href="{:url('Note/addNote')}"><cite>每日发布帖子</cite></a> 20%
+					</blockquote>
+					<p>
+						<block v-if="task['note'] == 1">
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-dange fly-delete">已完成</a>
+						</block>
+						<block v-else>
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">未完成</a>
+						</block>
+					</p>
+				</li>
+				<li>	<!--content-->
+					<blockquote class="layui-elem-quote">
+						<a href="{:url('Index/index')}"><cite>每日点赞帖子</cite></a> 20%
+					</blockquote>
+					<p>
+						<block v-if="task['content'] == 1">
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-dange fly-delete">已完成</a>
+						</block>
+						<block v-else>
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">未完成</a>
+						</block>
+					</p>
+				</li>
+				<li>	<!--good-->
+					<blockquote class="layui-elem-quote">
+						<a href="{:url('Index/index')}"><cite>每日评论帖子</cite></a> 20%
+					</blockquote>
+					<p>
+						<block v-if="task['good'] == 1">
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-dange fly-delete">已完成</a>
+						</block>
+						<block v-else>
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">未完成</a>
+						</block>
+					</p>
+				</li>
+				<li>	<!--recharge-->
+					<blockquote class="layui-elem-quote">
+						<a href="{:url('Data/recharge')}"><cite>每日充值</cite></a> 20%
+					</blockquote>
+					<p>
+						<block v-if="task['recharge'] == 1">
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-dange fly-delete">已完成</a>
+						</block>
+						<block v-else>
+							<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-danger fly-delete">未完成</a>
+						</block>
+					</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script src="http://localhost/Qifan/public/static/js/forum/Data/task.js"></script>

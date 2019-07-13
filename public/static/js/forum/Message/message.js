@@ -70,7 +70,8 @@ let message = new Vue({
         },
         AgreeFriend:function(type,username){
             try {
-                is_empty(username);
+                let that = this;
+                if (username == null) throw '参数错误!';
                 let name;
                 switch (type) {
                     case 1: name = '同意';break;
@@ -88,6 +89,8 @@ let message = new Vue({
                             type:'GET',
                             data:data,
                             success:function(res){
+                                message.fsg = [];
+                                that.messageList();
                                 $("#messageInfo").load(location.href + " #messageInfo");
                                 if (res.code == 1){
                                     layer.msg(res.msg,{icon:1});

@@ -13,7 +13,7 @@ let recharge = new Vue({
                 active: ''
             }
         ],
-        money:''
+        money: ''
     },
     created: function () {
         this.setTab(0);
@@ -49,20 +49,9 @@ let recharge = new Vue({
         recharge: function () {
             try {
                 let money = $("#money").val();
-                try {
-                    switch (money) {
-                        case "":
-                            throw "请填写充值余额";
-                            break;
-                        case money > 9999 :
-                            throw "一次充值不能大于9999!";
-                            break;
-                        case !Number.isInteger(money) :
-                            throw "请填写正确格式(数字)!";
-                    }
-                } catch (err) {
-                    layer.msg(err, {icon: 5});
-                }
+                if (money == "") throw "请填写充值余额";
+                if (money > 9999) throw "一次充值不能大于9999!";
+                if (isNaN(money)) throw "请填写正确格式(数字)!";
                 let data = {money: money};
                 let request = requestMethod('POST', data);
                 fetch('recharge', request)
@@ -70,6 +59,7 @@ let recharge = new Vue({
                     .then(res => {
                         if (res.code == 1) {
                             recharge.money = "";
+                            $("#likeCode").load(location.href + " #likeCode");
                             layer.msg(res.msg, {icon: 1});
                         } else {
                             layer.open({
@@ -91,7 +81,6 @@ let recharge = new Vue({
                 let insiderMoney = this.Money();
                 let insiderName = $("#insider").val();
                 if (insiderName == "") layer.msg('请选择会员!', {icon: 5});
-                return false;
                 let data = {
                     money: insiderMoney,
                     name: insiderName

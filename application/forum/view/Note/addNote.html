@@ -1,6 +1,5 @@
 {include file="../application/forum/view/public.html"/}
 {include file="../application/forum/view/fetch.html"/}
-<script src="http://localhost/Qifan/public/static/js/forum/Note/note.js"></script>
 <title>发表新帖 - Fly社区</title>
 </head>
 <body>
@@ -66,7 +65,7 @@
 							</div>
 						</div>
 						<div class="layui-form-item">
-							<button class="layui-btn" onclick="addNote()">立即发布</button>
+							<button class="layui-btn" v-on:click="addNote">立即发布</button>
 						</div>
 					</div>
 				</div>
@@ -77,3 +76,4 @@
 <div class="fly-footer"></div>
 </body>
 </html>
+<script src="http://localhost/Qifan/public/static/js/forum/Note/note.js"></script>

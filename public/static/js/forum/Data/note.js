@@ -70,6 +70,10 @@ let note = new Vue({
                 console.log(err);
                 layer.msg(err, {icon: 5})
             }
-        }
+        },
+        noteUrl:function(id){
+            is_empty(id);
+            window.location.href = "http://localhost/Qifan/public/index.php/forum/note/editNote.html?id=" + id;
+        },
     }
 });

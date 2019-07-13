@@ -1,10 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
+{include file="../application/forum/view/public.html"/}
+{include file="../application/forum/view/fetch.html"/}
+{include file="../application/forum/view/fetch.html"/}
+<script>
+    var n_id = {$n_id}
+</script>
+<title>编辑帖子 - Fly社区</title>
 </head>
 <body>
-
+{include file="../application/forum/view/templateIndex.html"/}
+<div class="layui-container fly-marginTop" id="note">
+	<div class="fly-panel" pad20 style="padding-top: 5px;">
+		<div class="layui-form layui-form-pane">
+			<div class="layui-tab layui-tab-brief" lay-filter="user">
+				<ul class="layui-tab-title">
+					<li class="layui-this">发表新帖</li>
+				</ul>
+				<div class="layui-form layui-tab-content" style="padding: 20px 0;">
+					<div class="layui-tab-item layui-show">
+						<div class="layui-row layui-col-space15 layui-form-item">
+							<div class="layui-col-md3"><label class="layui-form-label">所在专栏</label>
+								<div class="layui-input-block">
+									<select class="diy-select" id="classify">
+										<option :value="noteInfos.classify">{{noteInfos.classifyTitle}}</option>
+										{volist name="arr" id="vo"}
+											<option value="{$vo.id}">{$vo.title}</option>
+										{/volist}
+									</select>
+								</div>
+							</div>
+							<div class="layui-col-md9">
+								<label for="title" class="layui-form-label">标题</label>
+								<div class="layui-input-block">
+									<input type="text" id="title" :value="noteInfos.title" class="layui-input">
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<div class="layui-input-block">
+								<textarea id="content" placeholder="详细描述" :value="noteInfos.content" class="layui-textarea fly-editor" style="min-height: 260px;"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline"><label class="layui-form-label">是否评论</label>
+								<div class="layui-input-inline" style="width: 190px;">
+									<select id="is_content" class="diy-select">
+										<option value="1">是</option>
+										<option value="2">否</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<button class="layui-btn" v-on:click="editNote(noteInfos.id)">立即发布</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="fly-footer"></div>
 </body>
 </html>
+<script src="http://localhost/Qifan/public/static/js/forum/Note/note.js"></script>

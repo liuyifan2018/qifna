@@ -1,140 +1,141 @@
 {include file="../application/forum/view/public.html"/}
 {include file="../application/forum/view/fetch.html"/}
 <script>
-    let n_id = {$n_id};
+    var n_id = {$n_id}
 </script>
 </head>
 <body>
 {include file="../application/forum/view/templateIndex.html"/}
-<div id="Report"
-	 style="background: rgba(1,1,1,0.5);width: 100vw;height: 100vh;position: fixed;z-index: 999;display: none">
-	<div style="width: 30%;height: 40%;background: white;margin: 200px auto;border-radius: 3px">
-		<a href="javascript:getReport()"
-		   style="float:right;padding: 20px 20px;font-size:18px;font-weight: 700;color:#5e4505;clear:both">x</a>
-		<textarea id="port" placeholder="请输入你的意见..."
-				  style="width: 80%;height: 40%;padding: 10px;margin: 30px;resize: none;"></textarea>
-		<button onclick="Report({$data.username},{$note.note['username']},{$note.note['id']})"
-				style="width: 60px;height: 28px;background: #00a4a2;border: 1px solid #00a4a2;border-radius: 3px;margin: 0px 50px;">
-			提交
-		</button>
+<block id="note">
+	<div id="Report" :style="report">
+		<div :style="formStyle">
+			<a v-on:click="getReport" :style="outForm">x</a>
+			<textarea id="port" placeholder="请输入你的意见..." :style="textArea"></textarea>
+			<button v-on:click="report({$data.username},{$note.note['username']},{$note.note['id']})" :style="formSubmit">
+				提交
+			</button>
+		</div>
 	</div>
-</div>
-<div class="layui-container" id="note">
-	<div class="layui-row layui-col-space15">
-		<div class="layui-col-md8 content detail">
-			<div class="fly-panel detail-box"><h1>{$note.note['title']}</h1>
-				<div class="fly-detail-info">
-					<span class="layui-badge layui-bg-green fly-detail-column">            提问          </span>
-					<span
-							class="layui-badge" style="background-color: #999;">未结</span>
-					<span class="fly-list-nums">
+	<div class="layui-container">
+		<div class="layui-row layui-col-space15">
+			<div class="layui-col-md8 content detail">
+				<div class="fly-panel detail-box"><h1>{$note.note['title']}</h1>
+					<div class="fly-detail-info">
+						<span class="layui-badge layui-bg-green fly-detail-column">            提问          </span>
+						<span
+								class="layui-badge" style="background-color: #999;">未结</span>
+						<span class="fly-list-nums">
 						<a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> 1</a>
 						<i class="iconfont" title="人气">&#xe60b;</i> {$note.note['num']}
 					</span>
-					<a href="javascript:setReport()">
+					<a v-on:click="setReport" style="cursor:hand">
 						<span class="fly-list-nums" style="margin-top: -50px;color: #ff4a35"> 举报 </span>
 					</a>
-				</div>
-				<div class="detail-about">
-					<a class="fly-avatar" href=""><img src="{$note.note['img']}" alt="yyf2003_1"> </a>
-					<div class="fly-detail-user">
-						<a href="#" class="fly-link"><cite>{$note.note['name']}</cite> </a>
-						<span>{:date('Y-m-d H:i:s',$note.note['date'])}</span></div>
-					<div class="detail-hits"><span style="padding-right: 10px; color: #FF7200">悬赏：{$note.note['money']}飞吻</span>
+					</div>
+					<div class="detail-about">
+						<a class="fly-avatar" href=""><img src="{$note.note['img']}" alt="yyf2003_1"> </a>
+						<div class="fly-detail-user">
+							<a href="#" class="fly-link"><cite>{$note.note['name']}</cite> </a>
+							<span>{:date('Y-m-d H:i:s',$note.note['date'])}</span></div>
+						<div class="detail-hits"><span style="padding-right: 10px; color: #FF7200">悬赏：{$note.note['money']}飞吻</span>
+						</div>
+					</div>
+					<div class="layui-btn-container fly-detail-admin" id="LAY_jieAdmin" data-id="54412">
+						<button class="layui-btn layui-btn-sm jie-admin jie-admin-collect" type="collect"
+								data-type="add"
+								id="coll" style="visibility: visible;" v-on:click="collNote({$note.note['id']})">
+							{if condition="$note.coll == null"}
+							收藏
+							{else/}
+							取消收藏
+							{/if}
+						</button>
+					</div>
+					<div class="detail-body layui-text photos">
+						{$note.note['content']}
+						<a href="javascript:" style="float: right;margin-top:40%;">
+							<i class="iconfont icon-zan" title="点赞"> <span> {$note.good}</span></i>
+						</a>
 					</div>
 				</div>
-				<div class="layui-btn-container fly-detail-admin" id="LAY_jieAdmin" data-id="54412">
-					<button class="layui-btn layui-btn-sm jie-admin jie-admin-collect" type="collect" data-type="add"
-						id="coll" style="visibility: visible;" v-on:click="collNote({$note.note['id']})">
-						{if condition="$note.coll == null"}
-							收藏
-						{else/}
-							取消收藏
-						{/if}
-					</button>
-				</div>
-				<div class="detail-body layui-text photos">
-					{$note.note['content']}
-					<a href="javascript:" style="float: right;margin-top:40%;">
-						<i class="iconfont icon-zan" title="点赞"> <span> {$note.good}</span></i>
-					</a>
-				</div>
-			</div>
-			<div class="fly-panel detail-box" id="flyReply">
-				<fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
-					<legend>回帖</legend>
-				</fieldset>
-				<ul class="jieda" id="commentList" v-for="commentList in commentLists">
-					<li>
-						<div class="detail-about detail-about-reply">
-							<a class="fly-avatar" href="{:url('Data/user')}?username=commentList.username">
-								<img :src="commentList.img" alt="{{commentList.name}}"/> </a>
-							<div class="fly-detail-user">
-								<a href="{:url('Data/user')}?username=commentList.username" class="fly-link">
-									<cite>{{commentList.name}}</cite> <i class="layui-badge fly-badge-vip">{{commentList.insider}}</i>
-								</a>
+				<div class="fly-panel detail-box" id="flyReply">
+					<fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+						<legend>回帖</legend>
+					</fieldset>
+					<ul class="jieda" id="commentList" v-for="commentList in commentLists">
+						<li>
+							<div class="detail-about detail-about-reply">
+								<a class="fly-avatar" href="{:url('Data/user')}?username=commentList.username">
+									<img :src="commentList.img" alt="{{commentList.name}}"/> </a>
+								<div class="fly-detail-user">
+									<a href="{:url('Data/user')}?username=commentList.username" class="fly-link">
+										<cite>{{commentList.name}}</cite> <i class="layui-badge fly-badge-vip">{{commentList.insider}}</i>
+									</a>
+								</div>
+								<div class="detail-hits">
+									<span>{{commentList.date}}</span>
+								</div>
 							</div>
-							<div class="detail-hits">
-								<span>{{commentList.date}}</span>
+							<div class="detail-body layui-text jieda-body photos">
+								{{commentList.content}}
 							</div>
-						</div>
-						<div class="detail-body layui-text jieda-body photos">
-							{{commentList.content}}
-						</div>
-					</li>
-				</ul>
-				<div style="text-align: center"></div>
-				<a name="comment"> </a>
-				<div class="layui-form layui-form-pane">
-					<div class="layui-form-item layui-form-text">
-						<div class="layui-input-block">
+						</li>
+					</ul>
+					<div style="text-align: center"></div>
+					<a name="comment"> </a>
+					<div class="layui-form layui-form-pane">
+						<div class="layui-form-item layui-form-text">
+							<div class="layui-input-block">
 							<textarea id="content" placeholder="请输入内容" class="layui-textarea fly-editor"
 									  style="min-height: 150px;"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item"><input type="hidden" name="jid" value="54509">
+							<button class="layui-btn" v-on:click="content({$note.note['id']})">提交回复</button>
 						</div>
 					</div>
-					<div class="layui-form-item"><input type="hidden" name="jid" value="54509">
-						<button class="layui-btn" v-on:click="content({$note.note['id']})">提交回复</button>
+				</div>
+			</div>
+			<div class="layui-col-md4">
+				<dl class="fly-panel fly-list-one">
+					<dt class="fly-panel-title">本周热议</dt>
+					<dd><a href="/jie/54300/">table 显示空白，不显示数据异常。</a> <span><i
+							class="iconfont icon-pinglun1"></i> 28</span>
+					</dd>
+					<dd><a href="/jie/54319/">layui formSelects 怎么针对指定的option进行禁用 </a> <span><i
+							class="iconfont icon-pinglun1"></i> 24</span></dd>
+					<dd><a href="/jie/54342/">layui table复选框checkbox</a> <span><i
+							class="iconfont icon-pinglun1"></i> 18</span></dd>
+					<dd><a href="/jie/54392/">location.href跳转无效，该如何处理</a> <span><i
+							class="iconfont icon-pinglun1"></i> 16</span></dd>
+					<dd><a href="/jie/54335/">求救 !!! layui选中数据能否只选择一页不全部都选中,只想选择当前页数据。</a> <span><i
+							class="iconfont icon-pinglun1"></i> 14</span></dd>
+					<dd><a href="/jie/54202/">table内容出现纵向滚动条 table表头正好与内容错开一个纵向滚动条的宽度 对不上</a> <span><i
+							class="iconfont icon-pinglun1"></i> 14</span></dd>
+					<dd><a href="/jie/54288/">富文本编辑器上传图片显示问题</a> <span><i class="iconfont icon-pinglun1"></i> 13</span>
+					</dd>
+					<dd><a href="/jie/54398/">提交表单，怎么获取表单中的图片</a> <span><i class="iconfont icon-pinglun1"></i> 13</span>
+					</dd>
+					<dd><a href="/jie/54271/">layui layer open 打开子页面，子页面的js和success 方法js执行顺序混乱</a> <span><i
+							class="iconfont icon-pinglun1"></i> 12</span></dd>
+					<dd><a href="/jie/54269/">新开的窗口，在form表单提交后如何刷新父页面的table表格？求大佬们指点</a> <span><i
+							class="iconfont icon-pinglun1"></i> 12</span></dd>
+				</dl>
+				<div class="fly-panel">
+					<div class="fly-panel-title"> 心级赞助商 <span style="padding: 0 3px;">-</span> <a href="/jie/15697/"
+																								  class="fly-link fly-joinad    ">我要加入</a>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="layui-col-md4">
-			<dl class="fly-panel fly-list-one">
-				<dt class="fly-panel-title">本周热议</dt>
-				<dd><a href="/jie/54300/">table 显示空白，不显示数据异常。</a> <span><i class="iconfont icon-pinglun1"></i> 28</span>
-				</dd>
-				<dd><a href="/jie/54319/">layui formSelects 怎么针对指定的option进行禁用 </a> <span><i
-						class="iconfont icon-pinglun1"></i> 24</span></dd>
-				<dd><a href="/jie/54342/">layui table复选框checkbox</a> <span><i
-						class="iconfont icon-pinglun1"></i> 18</span></dd>
-				<dd><a href="/jie/54392/">location.href跳转无效，该如何处理</a> <span><i
-						class="iconfont icon-pinglun1"></i> 16</span></dd>
-				<dd><a href="/jie/54335/">求救 !!! layui选中数据能否只选择一页不全部都选中,只想选择当前页数据。</a> <span><i
-						class="iconfont icon-pinglun1"></i> 14</span></dd>
-				<dd><a href="/jie/54202/">table内容出现纵向滚动条 table表头正好与内容错开一个纵向滚动条的宽度 对不上</a> <span><i
-						class="iconfont icon-pinglun1"></i> 14</span></dd>
-				<dd><a href="/jie/54288/">富文本编辑器上传图片显示问题</a> <span><i class="iconfont icon-pinglun1"></i> 13</span></dd>
-				<dd><a href="/jie/54398/">提交表单，怎么获取表单中的图片</a> <span><i class="iconfont icon-pinglun1"></i> 13</span>
-				</dd>
-				<dd><a href="/jie/54271/">layui layer open 打开子页面，子页面的js和success 方法js执行顺序混乱</a> <span><i
-						class="iconfont icon-pinglun1"></i> 12</span></dd>
-				<dd><a href="/jie/54269/">新开的窗口，在form表单提交后如何刷新父页面的table表格？求大佬们指点</a> <span><i
-						class="iconfont icon-pinglun1"></i> 12</span></dd>
-			</dl>
-			<div class="fly-panel">
-				<div class="fly-panel-title"> 心级赞助商 <span style="padding: 0 3px;">-</span> <a href="/jie/15697/"
-																							  class="fly-link fly-joinad    ">我要加入</a>
+				<div class="fly-panel">
+					<div class="fly-panel-title"> 官方产品</div>
 				</div>
-			</div>
-			<div class="fly-panel">
-				<div class="fly-panel-title"> 官方产品</div>
-			</div>
-			<div class="fly-panel" style="padding: 20px 0; text-align: center;">
+				<div class="fly-panel" style="padding: 20px 0; text-align: center;">
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="fly-footer"></div>
+	<div class="fly-footer"></div>
+</block>
 </body>
 </html>
 <script src="http://localhost/Qifan/public/static/js/forum/Note/note.js"></script>

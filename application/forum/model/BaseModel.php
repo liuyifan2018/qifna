@@ -12,6 +12,19 @@ use think\Model;
 class BaseModel extends Model {
 
 	/**
+	 * @var array
+	 * 用户信息
+	 */
+	protected $data;
+
+	public function __construct($data = [])
+	{
+		parent::__construct($data);
+		if (empty($data)) throw new \Exception('用户未登录!');
+		$this->data = $data;
+	}
+
+	/**
 	 * @param $data
 	 * @param $arr
 	 * @return mixed

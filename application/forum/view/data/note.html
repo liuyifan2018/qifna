@@ -69,7 +69,7 @@
 											</div></td>
 										<td data-field="time" data-key="1-0-3" align="center" data-content="1541990727246" class="">
 											<div class="layui-table-cell ">
-												{$vo.date}
+												{:date('Y-m-d H:i:s',$vo.date)}
 											</div></td>
 										<td data-field="4" data-key="1-0-4" data-content="" class="layui-table-col-special">
 											<div class="layui-table-cell ">
@@ -87,7 +87,11 @@
 													上架
 												</a>
 												{/if}
-											</div></td>
+												<a class="layui-btn layui-btn-xs layui-btn-normal" v-on:click="noteUrl({$vo.id})">
+													编辑
+												</a>
+											</div>
+										</td>
 									</tr>
 									{/volist}
 									</tbody>
