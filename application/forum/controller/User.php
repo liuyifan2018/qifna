@@ -44,7 +44,8 @@ class User extends Controller {
 	}
 
 	/**
-	 * @return mixed
+	 * @return UserModel
+	 * @throws \Exception
 	 */
 	public function model(){
 		return new UserModel();

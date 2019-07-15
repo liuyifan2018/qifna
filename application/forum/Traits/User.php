@@ -54,6 +54,5 @@ trait User{
 		if (count($is_task) == 1){  //每日刷新任务进度,第一次进入登录刷新,第二次登录就不会刷新任务进度.
 			Db::name('user')->where(self::username())->update(['task' => 0]);
 		}
-		exit;
 	}
 }

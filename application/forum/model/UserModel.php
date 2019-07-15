@@ -14,11 +14,9 @@ use think\facade\Session;
 use think\facade\Cookie;
 
 class UserModel extends BaseModel implements UserFace {
-
-	public function __construct()
-	{
-		parent::__construct();
-	}
+	/**
+	 * user不验证登录
+	 */
 
 	/**
 	 * @param $data
