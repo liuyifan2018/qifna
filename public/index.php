@@ -4,6 +4,7 @@ namespace think;
 
 // 加载基础文件
 require __DIR__ . '/../thinkphp/base.php';
+define('BIND_MODULE','forum');
 define('SITE_URL', 'localhost/forum');
 
 // 执行应用并响应

@@ -17,7 +17,6 @@ class UserModel extends BaseModel implements UserFace {
 
 	public function __construct()
 	{
-		parent::__construct();
 	}
 
 	/**
