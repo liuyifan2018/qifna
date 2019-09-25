@@ -9,7 +9,7 @@
 namespace app\forum\controller;
 use app\forum\model\FriendModel;
 use app\forum\Traits\CURD;
-use app\forum\Traits\OutMsg;
+use app\common\OutMsg;
 use app\forum\Traits\User;
 use app\forum\Traits\Note;
 use think\facade\Request;

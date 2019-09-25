@@ -8,29 +8,18 @@
 
 namespace app\forum\Traits;
 
-use app\forum\Traits\OutMsg;
+use app\common\OutMsg;
 use think\Db;
 
 trait CURD
 {
 
     /**
-     * @param $modelName
-     * @return array
-     * @throws \Exception
-     * 获取字段信息
-     */
-    public static function getModelInfo($modelName)
-    {
-        if (empty($modelName)) throw new \Exception('表名错误!');
-        $key = Db::name($modelName)->find();
-        $keys = array_keys($key);
-        return $keys;
-    }
-
-    /**
+     * 接受参数处理
      * @return array|mixed|string|\think\response\Json
      * @throws \Exception
+     * @author liuyifan
+     * @carete_time 2019/8/30 16:50
      */
     public static function PurificationParam()
     {
@@ -47,6 +36,8 @@ trait CURD
     }
 
     /**
+     * 检查新增重复
+     *
      * @param $model string 数据库表名
      * @param $value string 判断字段
      * @param $repeat string 新增数据字段
@@ -54,32 +45,22 @@ trait CURD
      * @param null $id int 新增不带id，编辑判断id，自身修改不判断自身信息
      * @return mixed
      * @throws \Exception
-     * 检查新增重复
+     * @author liuyifan
+     * @carete_time 2019/8/30 16:50
      */
-    public static function nameRepeat($model, $value, $repeat, $error, $id = null)
-    {
-        $valueIn = $value;
-        $filed = self::getModelInfoKey($model);
-        if ($filed != null) {
+    public static function nameRepeat($model, $value, $repeat, $error, $id = null){
+        $filed = self::getModelInfo($model);
+        if ($filed != null){
             if (!in_array($value, $filed)) throw new \Exception('Field does not exist!');
-            if ($model == 'hk_home_admin') {
-                $value = "$value,uid";
-            } else {
-                $value = "$value,id";
-            }
-            $infoAll = Db::name($model)->field($value)->select();
+            $infoAll = DB::table($model)->field($value)->select();
             foreach ($infoAll as $k => $v) {
-                if (empty($infoAll[$k]['id'])) {
-                    if (!empty($id) && $infoAll[$k]['uid'] == $id) {
-                        unset($infoAll[$k]);
-                        if ($infoAll[$k][$valueIn] == $repeat) {
-                            return OutMsg::outErrorMsg($error);
-                        }
-                    }
-                }
-                if (!empty($id) && $infoAll[$k]['id'] == $id) {
+                if (!empty($id) && $infoAll[$k]['id'] == $id) { //主键为ID的表
                     unset($infoAll[$k]);
-                    if ($infoAll[$k][$valueIn] == $repeat) {
+                    if ($infoAll[$k][$value] == $repeat) {  //验证编辑的
+                        return OutMsg::outErrorMsg($error);
+                    }
+                }else{
+                    if ($infoAll[$k][$value] == $repeat) {    //新增全部验证
                         return OutMsg::outErrorMsg($error);
                     }
                 }
@@ -90,15 +71,18 @@ trait CURD
     }
 
     /**
+     * 获取某表字段
+     *
      * @param $modelName
      * @return array
      * @throws \Exception
-     * 获取某表字段
+     * @author liuyifan
+     * @carete_time 2019/8/30 16:50
      */
     public static function getModelInfoKey($modelName)
     {
         if (empty($modelName)) throw new \Exception('Table name error!');
-        $key = Db::name($modelName)->find();
+        $key = Db::table($modelName)->find();
         $keys = array_keys($key);
         return $keys;
     }

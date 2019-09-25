@@ -7,10 +7,10 @@
  */
 
 namespace app\forum\model;
+use app\common\Date;
+use app\common\OutMsg;
 
 use app\forum\Interfaces\FriendFace;
-use app\forum\Traits\Date;
-use app\forum\Traits\OutMsg;
 use think\Db;
 use think\facade\Cache;
 

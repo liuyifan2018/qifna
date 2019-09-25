@@ -6,10 +6,10 @@
  * Time: 10:40
  */
 namespace app\forum\controller;
+use app\common\Date;
+use app\common\OutMsg;
 use app\forum\model\UserModel;
 use app\forum\Traits\CURD;
-use app\forum\Traits\Date;
-use app\forum\Traits\OutMsg;
 use think\Controller;
 use think\facade\Request;
 use think\Db;
@@ -143,7 +143,7 @@ class User extends Controller {
 			for ($i = 0; $i < 10; $i++) {
 				$username .= $str[mt_rand(0, $max)];
 			}
-			$user = Db::table('user')->select();
+			$user = Db::name('user')->select();
 			foreach ($user as $k => $v){
 				if($user[$k]['username'] == $username){
 					for ($i = 0; $i < 10; $i++) {

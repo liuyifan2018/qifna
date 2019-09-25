@@ -8,7 +8,7 @@
 namespace app\forum\model;
 use app\forum\Interfaces\IndexFace;
 use app\forum\Traits\Note;
-use app\forum\Traits\OutMsg;
+use app\common\OutMsg;
 use think\Db;
 class IndexModel extends BaseModel implements IndexFace {
 

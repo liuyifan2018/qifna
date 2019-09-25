@@ -6,11 +6,10 @@
  * Time: 16:26
  */
 namespace app\forum\model;
-use app\forum\Traits\OutMsg;
+use app\common\OutMsg;
 use think\Model;
 
 class BaseModel extends Model {
-
 	/**
 	 * @var array
 	 * 用户信息

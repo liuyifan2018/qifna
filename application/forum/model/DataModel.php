@@ -4,15 +4,16 @@
  * User: Admin
  * Date: 2019/7/8
  * Time: 15:14
+ * @author liu
  */
 
 namespace app\forum\model;
+use app\common\Date;
+use app\common\OutMsg;
 
 use app\forum\Interfaces\DataFace;
-use app\forum\Traits\OutMsg;
 use think\Db;
 use think\facade\Cache;
-use app\forum\Traits\Date;
 
 class DataModel extends BaseModel implements DataFace
 {
@@ -53,6 +54,7 @@ class DataModel extends BaseModel implements DataFace
 	 * @param $msg
 	 * @return mixed
 	 * @throws \Exception
+     * 每日签到
 	 */
 	public function signed($start_time, $end_time, $msg)
 	{

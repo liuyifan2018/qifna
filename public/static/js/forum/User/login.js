@@ -24,15 +24,14 @@ function login(){
         fetch('login',request)
             .then(requestHandle)
             .then(res =>{
-                //请求成功进入的方法 (请求成功不代表程序运行成功!)
+                console.log(res);
                 if(res.code == 0){
                     throw res.msg;
                 }else{
                     window.location.href = '../Index/index';
                 }
             })
-            .catch(requestError);//接收 throw 返回的信息
-        //总结:fetch的第一个then是接到成功或失败的信息,catch是在js里报错原因;
+            .catch(requestError);
     }catch (err) {
         console.log(err);
         layer.msg(err,{icon:5});

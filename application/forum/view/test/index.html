@@ -5,41 +5,28 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
-<script>
-    window.onload = function () {
-        let kacker = document.getElementById("hacker");
-        let width = hacker.width = screen.width;
-        let height = kacker.height;
-        let ctx = hacker.getContext('2d');
-        let num = Math.ceil(width / 10);
-        let y = Array(num).join(0).split('');
-        let draw = function () {
-            ctx.fillStyle = 'rgba(0,0,0,.05)';
-            ctx.fillRect(0, 0, width, height);
-            ctx.fillStyle = '#0f0';
-            ctx.font = '10px Microsoft YaHei';
-            for (i = 0; i < num; i++) {
-                let x = (i * 10) + 10;
-                text = String.fromCharCode(65 + Math.random() * 62);
-                //console.log(text);  用来检测 text 的值
-                let y1 = y[i];
-                ctx.fillText(text, x, y1);
-                if (y1 > Math.random() * 10 * height) {
-                    y[i] = 0;
-                } else {
-                    y[i] = parseInt(y[i]) + 10;
-                }
-            }
-        }
-        Run();
+    <form method="post">
+        <input type="text" name="name">
+        <button class="ajax-post" type="submit" >提交</button>
+    </form>
 
-        function Run() {
-            Game_Interval = setInterval(draw, 100);
-        }
-    }
+<script>
+    $(".ajax-post").click(function(){
+        $.ajax({
+            url:'index',
+            data:{
+                name:111
+            },
+            type:'POST',
+            success:function(res){
+                console.log(1);
+            }
+        })
+        return false;
+    })
 </script>
 </body>
 </html>

@@ -1,0 +1,43 @@
+{include file="../application/admin/view/header.html"/}
+</head>
+<body>
+<div class="layui-fluid" id="user">
+    <div class="layui-row">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>账号</label>
+            <div class="layui-input-inline">
+                <input type="text" id="username" value="{$userInfo.username}" autocomplete="off" class="layui-input"
+                       readonly="readonly"></div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>昵称</label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" required="" value="{$userInfo.name}" autocomplete="off"
+                       class="layui-input"></div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>密码</label>
+            <div class="layui-input-inline">
+                <input type="password" id="password" value="{$userInfo.password}" required="" autocomplete="off"
+                       class="layui-input"></div>
+            <div class="layui-form-mid layui-word-aux">6到16个字符</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>确认密码</label>
+            <div class="layui-input-inline">
+                <input type="password" id="rePass" value="{$userInfo.password}" required="" autocomplete="off"
+                       class="layui-input"></div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <button class="layui-btn" v-on:click="userInfo()">修改信息</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{js href="/public/static/admin/js/user/user.js"/}

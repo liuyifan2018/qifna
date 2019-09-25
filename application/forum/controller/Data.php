@@ -8,9 +8,9 @@
  * 世间再无白山茶
  */
 namespace app\forum\controller;
+use app\common\Date;
+use app\common\OutMsg;
 use app\forum\model\DataModel;
-use app\forum\Traits\Date;
-use app\forum\Traits\OutMsg;
 use think\Db;
 use think\facade\Request;
 use app\forum\Traits\Note;

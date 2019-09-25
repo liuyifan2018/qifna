@@ -9,7 +9,7 @@
 namespace app\forum\model;
 
 use app\forum\Interfaces\MessageFace;
-use app\forum\Traits\OutMsg;
+use app\common\OutMsg;
 use think\Db;
 
 class MessageModel extends BaseModel implements MessageFace

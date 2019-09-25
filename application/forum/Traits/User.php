@@ -16,7 +16,7 @@ trait User{
 	public function isUser(){
 		$data = Session::get('data');
 		if(empty($data)){   //未登录跳入登录页
-			header('Location: http://localhost/Postbar/Public/Index/User/login');
+			$this->redirect('user/login');
 		}
 	}
 
