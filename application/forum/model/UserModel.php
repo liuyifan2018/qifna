@@ -4,24 +4,21 @@
  * User: Admin
  * Date: 2019/6/21
  * Time: 10:39
- * @author liu
  */
 namespace app\forum\model;
-
-use app\common\Date;
-use app\common\OutMsg;
-
 use app\forum\Interfaces\UserFace;
+use app\forum\Traits\Date;
+use app\forum\Traits\OutMsg;
 use think\Db;
 use think\facade\Session;
 use think\facade\Cookie;
 
 class UserModel extends BaseModel implements UserFace {
 
-    /**
-     * UserModel constructor.
-     */
-    public function __construct(){}
+	public function __construct()
+	{
+		parent::__construct();
+	}
 
 	/**
 	 * @param $data
@@ -30,7 +27,7 @@ class UserModel extends BaseModel implements UserFace {
 	 * 登录
 	 */
 	public function login( $data ){
-		if(isset($data['inPass'])){ //选中记住密码
+		if(isset($data['inPass'])){
 			Cookie::set('user', [
 				'inPass'    =>  $data['inPass'],
 				'username'  =>  $data['username'],
@@ -80,8 +77,7 @@ class UserModel extends BaseModel implements UserFace {
 		}elseif(!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $data['email'])){
 			return OutMsg::outErrorMsg("邮箱格式错误!");
 		}else{
-            $data['password'] = md5(md5($data['password']) . 'liuyifan');
-            $insert = Db::name('user')->strict(false)->insert($data);
+			$insert = Db::name('user')->strict(false)->insert($data);
 			if($insert === false){
 				return OutMsg::outErrorMsg('注册失败!');
 			}
