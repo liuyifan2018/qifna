@@ -17,21 +17,18 @@ trait Handle{
 		return false;
 	}
 
-	public static function unsetParam($param){
-
-	}
-
 	/**
 	 * @param $data array 验证的数据
-	 * @param $field array 验证的字段
+	 * @param $fields array 验证的字段
 	 * @return bool
 	 * @author liuyifan
 	 * @createTime 2019/9/6 10:03
 	 */
-	public static function dataDetection($data, $field){
-		for ($i = 0; $i < count($field); $i++) {
-			if ($data[$field[$i]] == "") return false;
+	public static function dataDetection($data, $fields){
+		for ($i = 0; $i < count($fields); $i++) {
+			if ($data[$fields[$i]] == "") return false;
 		}
+		return true;
 	}
 
 	/**

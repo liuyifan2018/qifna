@@ -5,6 +5,7 @@ namespace app\admin\model;
 use app\admin\CURD;
 use app\admin\Model;
 use app\admin\traits\Handle;
+use app\admin\service\Staff as StaffService;
 
 class Staff extends Model
 {
@@ -17,21 +18,6 @@ class Staff extends Model
 	 */
 	protected static $fields = ['username', 'name', 'password'];
 
-
-	/**
-	 * 验证新增编辑是否重复
-	 * @param $param string|int 验证数据
-	 * @param $field string 验证字段
-	 * @return bool
-	 * @throws \Exception
-	 * @author liuyifan
-	 * @createTime 2019/9/12 10:51
-	 */
-	public static function nameRepeat($param, $field) {
-		if (!CURD::nameRepeat('admin_user', $param, $field, null)) return false;
-		return true;
-	}
-
 	/**
 	 * 新增和修改
 	 * @param $data
@@ -40,23 +26,40 @@ class Staff extends Model
 	 * @author liuyifan
 	 * @createTime 2019/9/12 16:53
 	 */
-	public function verification($data){
+	public function verification($data) {
+		$setClassName = debug_backtrace();
+		array_shift($setClassName);
+		$className = $setClassName[0]['function'];
+
+		//密码加密
+		$data['rePass'] = User::encrypt($data['rePass']);
+
+		if ($className == 'staffEdit' && !Handle::hasParam($data['id']))
+			throw new \Exception('参数错误!');
+
 		if (!Handle::dataDetection($data, self::$fields))
 			throw new \Exception('必填项不能为空!');
 
 		if (!Handle::valueFit($data['password'], $data['rePass']))
 			throw new \Exception('密码不一致');
 
-		if (!self::nameRepeat($data['name'], 'name'))
+		if (!CURD::nameRepeat('admin_user', 'name', $data['name'], $className == 'staffAdd' ? null : $data['id']))
 			throw new \Exception('昵称重复');
 
-		if (!self::nameRepeat($data['username'], 'username'))
+		if (!CURD::nameRepeat('admin_user', 'username', $data['username'], $className == 'staffAdd' ? null : $data['id']))
 			throw new \Exception('用户名重复');
 
-		$setClassName = debug_backtrace();
-		array_shift($setClassName);
-		$className = $setClassName[0]['function'];
-		switch ($className){
+		if ($className == 'staffAdd') {    //新增操作
+			$data['password'] = User::encrypt($data['password']);
+			$data['create_time'] = time();
+		}
+
+		if ($className == 'staffEdit' && StaffService::staffInfo($data['id'])['password'] != $data['password']) {    //编辑操作
+			$data['password'] = User::encrypt($data['password']);
+		}
+
+		unset($data['rePass']);
+		switch ($className) {
 			case 'staffAdd':
 				$operation = $this->insert($data);
 				break;

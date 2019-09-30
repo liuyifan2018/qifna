@@ -11,6 +11,7 @@ class Staff extends Controller
 	/**
 	 * 获取单个用户信息
 	 * @param $id
+	 * @param $username
 	 * @return array|\PDOStatement|string|\think\Model|null
 	 * @throws \think\db\exception\DataNotFoundException
 	 * @throws \think\db\exception\ModelNotFoundException
@@ -18,8 +19,25 @@ class Staff extends Controller
 	 * @author liuyifan
 	 * @createTime 2019/9/12 10:20
 	 */
-	public static function staffInfo($id) {
-		return StaffModel::where('id', $id)->find();
+	public static function staffInfo($id, $username = null) {
+		$staffInfo = StaffModel::where('id', $id)->find();
+		if (empty($staffInfo)) $staffInfo = StaffModel::where('username',$username)->find();
+		return $staffInfo;
+	}
+
+	/**
+	 * 搜索获取某个用户信息
+	 * @param $username
+	 * @return array|\PDOStatement|string|\think\Model|null
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 * @author liuyifan
+	 * @createTime 2019/9/27 15:20
+	 */
+	public static function staffSearch($username) {
+		$userInfo = self::staffInfo(null,$username);
+		return $userInfo;
 	}
 
 	/**
@@ -31,7 +49,8 @@ class Staff extends Controller
 	 * @createTime 2019/9/12 10:53
 	 */
 	public static function staffAdd($data) {
-		StaffModel::verification($data);
+		$staffModel = new staffModel();
+		$staffModel->verification($data);
 		return true;
 	}
 
@@ -44,7 +63,8 @@ class Staff extends Controller
 	 * @createTime 2019/9/12 16:54
 	 */
 	public static function staffEdit($data) {
-		StaffModel::verification($data);
+		$staffModel = new staffModel();
+		$staffModel->verification($data);
 		return true;
 	}
 
@@ -78,11 +98,11 @@ class Staff extends Controller
 	 * @author liuyifan
 	 * @createTime 2019/9/12 16:55
 	 */
-	public static function staffDel($id){
+	public static function staffDel($id) {
 		if (!Handle::hasParam($id))
 			throw new \Exception('参数错误');
 
-		StaffModel::where('id',$id)->delete();
+		StaffModel::where('id', $id)->delete();
 		return true;
 	}
 }

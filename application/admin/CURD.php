@@ -89,19 +89,11 @@ trait CURD
 			if (!in_array($value, $filed)) throw new \Exception('Field does not exist!');
 			$infoAll = Db::name($model)->field($value)->select();
 			foreach ($infoAll as $k => $v) {
-				if (empty($infoAll[$k]['id'])) {    //主键为UID的表
-					if ($infoAll[$k]['uid'] == $id) {    //判断编辑
-						unset($infoAll[$k]); //编辑不判断自身重复
-						if ($infoAll[$k][$value] == $repeat) return false;
-					}else{
-						if ($infoAll[$k][$value] == $repeat) return false;    //判断新增
-					}
-				}
-				if (!empty($id) && $infoAll[$k]['id'] == $id) { //主键为ID的表
+				if (!empty($id) && $infoAll[$k]['id'] == $id) {	//编辑
 					unset($infoAll[$k]);
 					if ($infoAll[$k][$value] == $repeat) return false;
-				}else{
-					if ($infoAll[$k][$value] == $repeat) return false; //新增全部验证
+				}else{	//新增
+					if ($infoAll[$k][$value] == $repeat) return false;
 				}
 			}
 			return true;

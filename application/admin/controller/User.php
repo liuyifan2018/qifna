@@ -7,7 +7,6 @@ use app\admin\service\LoginException;
 use app\admin\traits\OutPut;
 use app\admin\traits\User as UserTrait;
 use app\admin\service\User as UserService;
-use think\captcha\Captcha;
 use think\Controller;
 use think\Exception;
 use think\facade\Cache;
@@ -62,11 +61,6 @@ class User extends Controller{
 			return $this->outPutSuccess($this->url);
 		}
 		return view('login', ['title' => '登录']);
-	}
-
-	public function verify(){
-		$captcha = new Captcha();
-		return $captcha->create();
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?php
-namespace app\common;
+namespace app\energy\common;
 
 final class WxLogin{
 

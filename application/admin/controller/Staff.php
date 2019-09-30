@@ -7,7 +7,8 @@ use app\admin\model\Staff as StaffModel;
 use app\admin\service\Staff as StaffService;
 use think\facade\Request;
 
-class Staff extends Controller{
+class Staff extends Controller
+{
 
 	/**
 	 * 获取管理用户列表
@@ -19,13 +20,34 @@ class Staff extends Controller{
 	 * @author liuyifan
 	 * @createTime 2019/9/10 10:22
 	 */
-	public function staffLists(){
+	public function staffLists() {
 
 		$lists = StaffModel::order('id asc')->paginate(8);
-
+		var_dump($lists);
 		return view('staffLists', [
-			'lists' => $lists
+			'lists'  => $lists,
 		]);
+	}
+
+	/**
+	 * 搜索查询单个用户
+	 *
+	 * @return mixed
+	 * @throws \think\db\exception\DataNotFoundException
+	 * @throws \think\db\exception\ModelNotFoundException
+	 * @throws \think\exception\DbException
+	 * @author liuyifna
+	 * @createTime 2019/9/27 14:50
+	 */
+	public function staffSearchInfo(){
+		if (Request::isPost()) {
+			$userInfo['isUser'] = 1;
+			$userInfo['data'] = StaffService::staffSearch($this->fetch['username']);
+			if (empty($userInfo['data'])){
+				$userInfo['isUser'] = 3;
+			}
+			return json($userInfo);
+		}
 	}
 
 	/**
@@ -34,14 +56,15 @@ class Staff extends Controller{
 	 * @author liuyifan
 	 * @createTime 2019/9/12 11:00
 	 */
-	public function staffAdd(){
-		try{
-			if (Request::isPost()){
+	public function staffAdd() {
+		try {
+			if (Request::isPost()) {
 				StaffService::staffAdd($this->fetch);
+				self::outPutSuccess('新增成功');
 			}
 			return view('staffAdd');
-		}catch (\Exception $e){
-			return $this->outPutError($e->getMessage());
+		} catch (\Exception $e) {
+			self::outPutError($e->getMessage());
 		}
 	}
 
@@ -51,34 +74,51 @@ class Staff extends Controller{
 	 * @author liuyifan
 	 * @createTime 2019/9/12 11:01
 	 */
-	public function staffEdit(){
-		try{
+	public function staffEdit() {
+		try {
 			if (Request::isPost()) {
 				StaffService::staffEdit($this->fetch);
+				self::outPutSuccess('编辑成功');
 			}
-			return view('staffEdit');
-		}catch (\Exception $e){
-			return $this->outPutError($e->getMessage());
+			return view('staffEdit',[
+				'staffInfo'	=>	StaffService::staffInfo($this->param['id'])
+			]);
+		} catch (\Exception $e) {
+			self::outPutError($e->getMessage());
 		}
 	}
 
+	/**
+	 * 修改状态
+	 * @return \think\response\Json|void
+	 * @author liuyifan
+	 * @createTime 2019/9/12 11:02
+	 */
 	public function setStatus() {
-		try{
-			if (Request::isGet()){
+		try {
+			if (Request::isGet()) {
 				StaffService::setStatus($this->param['id']);
+				self::outPutSuccess('修改成功');
 			}
-		}catch (\Exception $e){
-			return $this->outPutError($e->getMessage());
+		} catch (\Exception $e) {
+			self::outPutError($e->getMessage());
 		}
 	}
 
-	public function delete(){
-		try{
+	/**
+	 * 删除用户
+	 * @return \think\response\Json|void
+	 * @author liuyifan
+	 * @createTime 2019/9/12 11:03
+	 */
+	public function staffDel() {
+		try {
 			if (Request::isGet()) {
 				StaffService::staffDel($this->param['id']);
+				self::outPutSuccess('删除成功');
 			}
-		}catch (\Exception $e){
-			return $this->outPutError($e->getMessage());
+		} catch (\Exception $e) {
+			self::outPutError($e->getMessage());
 		}
 	}
 }

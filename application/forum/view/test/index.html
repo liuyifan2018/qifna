@@ -4,29 +4,21 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <title>Ls框架</title>
 </head>
 <body>
-    <form method="post">
-        <input type="text" name="name">
-        <button class="ajax-post" type="submit" >提交</button>
-    </form>
-
 <script>
-    $(".ajax-post").click(function(){
-        $.ajax({
-            url:'index',
-            data:{
-                name:111
-            },
-            type:'POST',
-            success:function(res){
-                console.log(1);
-            }
-        })
-        return false;
-    })
+    let Lquery = function () {};
+    Lquery.fn = Lquery.prototype = {
+        version : '1',
+        size:function () {
+            return this.length;
+        }
+    };
+
+    let test = new Lquery();
+    console.log(Lquery().version);
+    console.log(Lquery().size());
 </script>
 </body>
 </html>

@@ -30,4 +30,8 @@ class test extends Controller{
 		$calculatedDistance = $earthRadius * $stepTwo;
 		return round($calculatedDistance);
 	}
+
+	public function index(){
+    	return view();
+	}
 }

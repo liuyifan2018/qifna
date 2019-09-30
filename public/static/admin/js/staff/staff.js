@@ -1,6 +1,8 @@
 let staff = new Vue({
     el: '#staff',
-    data: {},
+    data: {
+        searchUser:[]
+    },
     created: function () {
 
     },
@@ -25,6 +27,7 @@ let staff = new Vue({
                     .then(res => {
                         if (res.code == 1) {
                             layer.msg(res.msg, {icon: 1});
+                            setTimeout(function () {window.location.reload();},1000)
                         } else {
                             layer.msg(res.msg, {icon: 2});
                         }
@@ -56,6 +59,7 @@ let staff = new Vue({
                     .then(res => {
                         if (res.code == 1) {
                             layer.msg(res.msg, {icon: 1});
+                            setTimeout(function () {window.location.reload();},1000)
                         } else {
                             layer.msg(res.msg, {icon: 2});
                         }
@@ -77,6 +81,7 @@ let staff = new Vue({
                             .then(res => {
                                 if (res.code == 1) {
                                     layer.msg(res.msg, {icon: 1});
+                                    setTimeout(function () {window.location.reload();},2000)
                                 } else {
                                     layer.msg(res.msg, {icon: 2});
                                 }
@@ -100,6 +105,7 @@ let staff = new Vue({
                     .then(res => {
                         if (res.code == 1) {
                             layer.msg(res.msg, {icon: 1});
+                            setTimeout(function () {window.location.reload();},2000)
                         } else {
                             layer.msg(res.msg, {icon: 2});
                         }
@@ -108,6 +114,28 @@ let staff = new Vue({
             } catch (e) {
                 layer.msg(e, {icon: 5});
             }
+        },
+        search: function () {
+            try {
+                $("#searchInfo").css('display', 'none');
+                let username = $("#username").val();
+                let data = {username: username};
+                let request = requestMethod('POST', data);
+                fetch('staffSearchInfo', request)
+                    .then(requestHandle)
+                    .then(res => {
+                        if (res.isUser == 1) {
+                            staff.searchUser = res.data;
+                            $("#searchInfo").css('display', 'block');
+                        }
+                    })
+                    .catch(requestError);
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        outInfo: function () {
+            $("#searchInfo").css('display','none');
         }
     }
 });

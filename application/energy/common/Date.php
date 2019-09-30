@@ -5,7 +5,7 @@
  * Date: 2019/6/21
  * Time: 10:39
  */
-namespace app\common;
+namespace app\energy\common;
 trait Date{
 	/**
 	 * @return int

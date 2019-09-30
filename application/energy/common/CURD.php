@@ -6,7 +6,7 @@
  * Time: 11:40
  */
 
-namespace app\common;
+namespace app\energy\common;
 
 use think\Db;
 
