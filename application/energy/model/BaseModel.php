@@ -1,8 +1,8 @@
 <?php
 namespace app\energy\model;
 
-use think\Model;
+use app\energy\Model;
 
-class BaseModel extends Model{
+class BaseModel extends Model {
 
 }

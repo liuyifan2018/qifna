@@ -1,0 +1,44 @@
+{include file="../application/admin/view/header.html"/}
+</head>
+<body>
+<div class="layui-fluid" id="staff">
+    <div class="layui-row">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">
+                    <span class="x-red">*</span>账号</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="username" required="" autocomplete="off" class="layui-input"></div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">*</span>将会成为您唯一的登入名
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span>昵称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="name" required="" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label">
+                    <span class="x-red">*</span>密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="password" required="" autocomplete="off" class="layui-input"></div>
+                <div class="layui-form-mid layui-word-aux">6到16个字符</div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label">
+                    <span class="x-red">*</span>确认密码</label>
+                <div class="layui-input-inline">
+                    <input type="password" id="rePass" required="" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label"></label>
+                <button class="layui-btn" v-on:click="staffAdd()">增加</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{js href="/tp5.1/public/static/admin/js/staff/staff.js"}

@@ -1,6 +1,11 @@
 <?php
 namespace app\admin\common;
 
+/**
+ * 参数获取
+ * Trait Param
+ * @package app\admin\common
+ */
 trait Param{
 
 	/**
@@ -22,6 +27,10 @@ trait Param{
 		return $data;
 	}
 
+	/**
+	 * 处理Fetch的Get请求
+	 * @return array|mixed|string|null
+	 */
 	public static function PurificationGetFetchParam(){
 		$data = input('param.');
 		if (empty($data)) return null;

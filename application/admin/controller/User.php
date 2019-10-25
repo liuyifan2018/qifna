@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\common\Param;
-use app\admin\service\LoginException;
+use app\admin\Exception\LoginException;
 use app\admin\traits\OutPut;
 use app\admin\traits\User as UserTrait;
 use app\admin\service\User as UserService;
@@ -56,9 +56,9 @@ class User extends Controller{
 			try {
 				UserService::login($this->fetch);
 			} catch (LoginException $e) {
-				return $this->outPutError($e->getMessage());
+				return self::outPutError($e->getMessage());
 			}
-			return $this->outPutSuccess($this->url);
+			return self::outPutSuccess($this->url);
 		}
 		return view('login', ['title' => '登录']);
 	}
@@ -77,9 +77,9 @@ class User extends Controller{
 			try{
 				UserService::updateUser($this->fetch);
 			}catch (\Exception $e){
-				return $this->outPutError($e->getMessage());
+				return self::outPutError($e->getMessage());
 			}
-			return $this->outPutSuccess('更新成功!');
+			return self::outPutSuccess('更新成功!');
 		}
 		return view('userInfo',[
 			'userInfo'	=>  UserTrait::userInfo()

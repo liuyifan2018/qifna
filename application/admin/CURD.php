@@ -40,34 +40,7 @@ trait CURD
 	 * @createTime
 	 */
 	protected static function valueSetInc($id, $key, $val, $model) {
-		return Db::name($model)->where(['id' => $id])->setInc($key, $val) === true ? true : false;
-
-	}
-
-	protected function create() {
-		if (Request::isPost()) {
-			$data = Request::param();
-
-		}
-	}
-
-	protected function update() {
-
-	}
-
-	protected function delete() {
-
-	}
-
-
-	protected function setStatus() {
-		if (Request::isGet()){
-			$data = Request::param();
-
-		}
-	}
-
-	protected function setField() {
+		return Db::name($model)->where('id','=',$id)->setInc($key, $val) === true ? true : false;
 
 	}
 
@@ -87,7 +60,7 @@ trait CURD
 		$filed = self::getModelInfo($model);
 		if ($filed != null){
 			if (!in_array($value, $filed)) throw new \Exception('Field does not exist!');
-			$infoAll = Db::name($model)->field($value)->select();
+			$infoAll = Db::name($model)::field($value)->select();
 			foreach ($infoAll as $k => $v) {
 				if (!empty($id) && $infoAll[$k]['id'] == $id) {	//编辑
 					unset($infoAll[$k]);
@@ -111,7 +84,7 @@ trait CURD
 	 */
 	public static function getModelInfo($modelName){
 		if (empty($modelName)) throw new \Exception('Table name error!');
-		$key = Db::name($modelName)->find();
+		$key = Db::name($modelName)::find();
 		$keys = array_keys($key);
 		return $keys;
 	}

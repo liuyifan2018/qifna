@@ -37,6 +37,7 @@ trait OutPut{
 	 * @param $msg
 	 * @param $code
 	 * @param $data
+	 * @return \think\response\Json
 	 * @author liuyifan
 	 * @createTime 2019/9/6 2:16
 	 */
@@ -45,6 +46,6 @@ trait OutPut{
 		$result['code'] = $code;
 		$result['data'] = $data;
 		$result['time'] = request()->time();
-		exit(json($result));
+		return json($result);
 	}
 }

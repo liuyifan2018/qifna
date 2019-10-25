@@ -1,0 +1,28 @@
+{include file="../application/admin/view/header.html"/}
+</head>
+<body>
+<div class="layui-fluid" id="classify">
+    <div class="layui-row">
+        <div class="layui-form">
+            <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label">
+                    <span class="x-red">*</span>分类名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="classifyName" required="" value="{$classifyInfo.title}" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">
+                    <span class="x-red">*</span>排序</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="sort" required="" value="{$classifyInfo.sort}" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label"></label>
+                <button class="layui-btn" v-on:click="classifyEdit({$classifyInfo.id})">编辑</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{js href="/tp5.1/public/static/admin/js/classify/classify.js"/}

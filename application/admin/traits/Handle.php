@@ -7,13 +7,13 @@ trait Handle{
 	/**
 	 * 如果参数为空不验证参数
 	 *
-	 * @param $param int
+	 * @param $param
 	 * @return mixed
 	 * @author liuyifan
 	 * @createTime 2019/9/4 22:57
 	 */
-	public static function hasParam($param){
-		if (!empty((int)$param)) return true;
+	public static function hasParam(int $param){
+		if (!empty($param) || $param > 1) return true;
 		return false;
 	}
 

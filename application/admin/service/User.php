@@ -3,6 +3,7 @@
 namespace app\admin\service;
 
 use app\admin\CURD;
+use app\admin\Exception\LoginException;
 use app\admin\model\User as UserModel;
 use app\admin\model\ULog as UserLog;
 use think\Controller;

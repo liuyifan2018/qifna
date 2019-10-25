@@ -1,5 +1,5 @@
 <?php
-namespace app\admin\service;
+namespace app\admin\Exception;
 
 class LoginException extends \LogicException{
 

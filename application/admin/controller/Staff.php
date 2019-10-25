@@ -7,8 +7,7 @@ use app\admin\model\Staff as StaffModel;
 use app\admin\service\Staff as StaffService;
 use think\facade\Request;
 
-class Staff extends Controller
-{
+class Staff extends Controller{
 
 	/**
 	 * 获取管理用户列表
@@ -23,7 +22,6 @@ class Staff extends Controller
 	public function staffLists() {
 
 		$lists = StaffModel::order('id asc')->paginate(8);
-		var_dump($lists);
 		return view('staffLists', [
 			'lists'  => $lists,
 		]);
@@ -60,11 +58,11 @@ class Staff extends Controller
 		try {
 			if (Request::isPost()) {
 				StaffService::staffAdd($this->fetch);
-				self::outPutSuccess('新增成功');
+				return self::outPutSuccess('新增成功');
 			}
 			return view('staffAdd');
 		} catch (\Exception $e) {
-			self::outPutError($e->getMessage());
+			return self::outPutError($e->getMessage());
 		}
 	}
 
@@ -78,7 +76,7 @@ class Staff extends Controller
 		try {
 			if (Request::isPost()) {
 				StaffService::staffEdit($this->fetch);
-				self::outPutSuccess('编辑成功');
+				return self::outPutSuccess('编辑成功');
 			}
 			return view('staffEdit',[
 				'staffInfo'	=>	StaffService::staffInfo($this->param['id'])
@@ -98,7 +96,7 @@ class Staff extends Controller
 		try {
 			if (Request::isGet()) {
 				StaffService::setStatus($this->param['id']);
-				self::outPutSuccess('修改成功');
+				return self::outPutSuccess('修改成功');
 			}
 		} catch (\Exception $e) {
 			self::outPutError($e->getMessage());
@@ -115,10 +113,10 @@ class Staff extends Controller
 		try {
 			if (Request::isGet()) {
 				StaffService::staffDel($this->param['id']);
-				self::outPutSuccess('删除成功');
+				return self::outPutSuccess('删除成功');
 			}
 		} catch (\Exception $e) {
-			self::outPutError($e->getMessage());
+			return self::outPutError($e->getMessage());
 		}
 	}
 }

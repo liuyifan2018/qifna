@@ -94,8 +94,8 @@ let staff = new Vue({
             })
         },
         setStatus: function (id) {
-            is_empty(id);
             try {
+                is_empty(id);
                 let data = {
                     id: id
                 };

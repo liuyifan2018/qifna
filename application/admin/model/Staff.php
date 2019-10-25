@@ -64,7 +64,7 @@ class Staff extends Model
 				$operation = $this->insert($data);
 				break;
 			case 'staffEdit':
-				$operation = $this->where('id', $data['id'])->update($data);
+				$operation = $this->where('id','=', $data['id'])->update($data);
 				break;
 			default:
 				$operation = false;

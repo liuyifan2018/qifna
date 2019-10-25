@@ -14,7 +14,7 @@
         <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
     </a>
 </div>
-<div class="layui-fluid">
+<div class="layui-fluid" id="classify">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
@@ -62,18 +62,23 @@
                                 <input type="text" class="layui-input x-sort" name="order" value="{$vo.sort}">
                             </td>
                             <td>
-                                <input type="checkbox" name="switch" lay-text="开启|停用" checked="" lay-skin="switch">
+                                {if condition="$vo.status == 1"}
+                                <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span>
+                                {else/}
+                                <span class="layui-btn layui-btn-normal layui-btn-mini layui-btn-disabled">已停用</span>
+                                {/if}
                             </td>
                             <td class="td-manage">
-                                <button class="layui-btn layui-btn layui-btn-xs"
-                                        onclick="xadmin.open('编辑','admin-edit.html')"><i class="layui-icon">&#xe642;</i>编辑
-                                </button>
-                                <button class="layui-btn layui-btn-warm layui-btn-xs"
-                                        onclick="xadmin.open('编辑','admin-edit.html')"><i class="layui-icon">&#xe642;</i>添加子栏目
-                                </button>
-                                <button class="layui-btn-danger layui-btn layui-btn-xs"
-                                        onclick="member_del(this,'要删除的id')" href="javascript:;"><i class="layui-icon">&#xe640;</i>删除
-                                </button>
+                                <a title="启用" href="javascript:;" v-on:click="setStatus({$vo.id})">
+                                    <i class="layui-icon">&#xe601;</i>
+                                </a>
+                                <a title="编辑" onclick="xadmin.open('编辑','classifyEdit.html?id={$vo.id}',500,300)"
+                                   href="javascript:;">
+                                    <i class="layui-icon">&#xe642;</i>
+                                </a>
+                                <a title="删除" id="delete" v-on:click="classifyDel({$vo.id})" href="javascript:;">
+                                    <i class="layui-icon">&#xe640;</i>
+                                </a>
                             </td>
                         </tr>
                         {/volist}
@@ -89,55 +94,6 @@
         </div>
     </div>
 </div>
-<script>
-    layui.use(['form'], function () {
-        form = layui.form;
-
-    });
-
-    /*用户-删除*/
-    function member_del(obj, id) {
-        layer.confirm('确认要删除吗？', function (index) {
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!', {icon: 1, time: 1000});
-        });
-    }
-
-    // 分类展开收起的分类的逻辑
-    //
-    $(function () {
-        $("tbody.x-cate tr[fid!='0']").hide();
-        // 栏目多级显示效果
-        $('.x-show').click(function () {
-            if ($(this).attr('status') == 'true') {
-                $(this).html('&#xe625;');
-                $(this).attr('status', 'false');
-                cateId = $(this).parents('tr').attr('cate-id');
-                $("tbody tr[fid=" + cateId + "]").show();
-            } else {
-                cateIds = [];
-                $(this).html('&#xe623;');
-                $(this).attr('status', 'true');
-                cateId = $(this).parents('tr').attr('cate-id');
-                getCateId(cateId);
-                for (var i in cateIds) {
-                    $("tbody tr[cate-id=" + cateIds[i] + "]").hide().find('.x-show').html('&#xe623;').attr('status', 'true');
-                }
-            }
-        })
-    })
-
-    var cateIds = [];
-
-    function getCateId(cateId) {
-        $("tbody tr[fid=" + cateId + "]").each(function (index, el) {
-            id = $(el).attr('cate-id');
-            cateIds.push(id);
-            getCateId(id);
-        });
-    }
-
-</script>
 </body>
 </html>
+{js href="/tp5.1/public/static/admin/js/classify/classify.js"}
