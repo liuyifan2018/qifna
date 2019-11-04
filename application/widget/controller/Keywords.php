@@ -8,19 +8,25 @@
 namespace app\widget\controller;
 
 use app\widget\data\Base;
+use app\widget\template\Nanny;
 
 class Keywords
 {
 
 	public $queryType
 		= [
-			0 => '保洁',
-			1 => '保姆',
-			2 => '疏通',
-			3 => '家电',
-			4 => '家具',
-			5 => '搬家',
+			1 => '保洁',
+			2 => '保姆',
+			3 => '疏通',
+			4 => '家电',
+			5 => '家具',
+			6 => '搬家',
 		];
+
+	/**
+	 * @var $nanny
+	 */
+	public $nanny;
 
 	/**
 	 * 模板基类
@@ -40,7 +46,6 @@ class Keywords
 	public function keywords($query,$kid) {
 		$totalData = $this->base->getClass($kid)->widgetData($query);
 		return (string)$totalData;
-
 		//因实现多Api模式，关闭此功能 (如果我拿这个关键字还要再关键字池循环匹配一遍，还不如直接过来已知标识的关键字，直接去取数据);
 //		$data = json_decode($this->liuyifan_curl_get_contents('http://wy.51daoteng.com/phpexcel/import.php'));
 //		foreach ($data as $k => $v) {
@@ -56,6 +61,7 @@ class Keywords
 
 
 	function liuyifan_curl_get_contents($url) {
+		//    return file_get_contents($url);
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);

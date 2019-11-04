@@ -4,7 +4,6 @@ namespace app\widget\controller;
 
 use Exception;
 
-include_once 'keywords.php';
 /**
  * widget搜索入口
  * Class Index
@@ -24,13 +23,14 @@ class Index
 	}
 
 	/**
-	 * widget 保姆模板 搜索入口
+	 * widget搜索入口
 	 * @author liuyifan
 	 * @createTime 2019/10/15 14:11
 	 */
-	public function widgetNannyQuery() {
+	public function widgetQuery() {
+		$postStr = file_get_contents("php://input");
+		$this->setLog('返回数据',$postStr);
 		try {
-			$postStr = file_get_contents("php://input");
 			if (!empty($postStr) && is_string($postStr)) {
 				$postArr = json_decode($postStr, true);
 				if ($postArr['MsgType'] == 'event' || $postArr['Event'] == 'wxa_widget_data') {    //widget事件消息
@@ -39,17 +39,15 @@ class Index
 						"type"      => 1011045,
 						"slot_list" => [
 							[
-								"key"   => "city",
 								"value" => $postArr["Query"]
 							],
 							[
-								"key"   => "service",
 								"value" => $postArr["Query"]
 							],
 						]
 					]);
 					$content['scene'] = 1;
-					$content['data'] = $this->keyword->keywords($postArr['Query'],1);
+					$content['data'] = $this->keyword->keywords($postArr['Query'], 1);
 					$jsonData = json_encode([
 						"ToUserName"   => $postArr['ToUserName'],
 						"FromUserName" => $postArr['FromUserName'],
@@ -57,17 +55,24 @@ class Index
 						"MsgType"      => "widget_data",
 						"Content"      => json_encode($content)
 					]);
+					$this->setLog('返回数据',$jsonData);
 					exit($jsonData);
 				}
 			} else {
-				$this->keyword->base->getClass(1)->fixedData();
+				echo '错误1';
 			}
 		} catch (Exception $e) {
-			$this->keyword->base->getClass(1)->fixedData();
+			$this->setLog('返回数据',$e->getMessage());
 		}
 	}
 
-	public function widgetElectricQuery(){
 
+	/** 错误日志
+	 * @param $msg
+	 * @param $data
+	 */
+	public function setLog($msg, $data) {
+		$basePath = dirname(__File__);
+		file_put_contents($basePath . '/fail.txt', $msg . '::::' . $data . '&&&&&&&&&&&', FILE_APPEND);
 	}
 }

@@ -21,16 +21,67 @@ class Electric implements Template
 	 */
 	public function widgetData($query) {
 		$data = [
-			"err_code"  => 0,
-			"err_msg"   => "success",
-			"img_url"   => $this->image(),
-			"jump_url"  => $this->jumpUrl(),
-			"service"   => $this->serviceName(),
-			"type"      => $this->type(),
-			"skil_list" => $this->skilList(),
-			"price"     => $this->price()
+			"err_code"             => 0,
+			"err_msg"              => "success",
+			"jump_url"             => $this->jumpUrl(),
+			"address_desc"         => $this->getlatInfo(),
+			"business_result_list" => [
+				[
+					"jump_url"  => "",
+					"img_url"   => "",
+					"title"     => "马桶疏通",
+					"sales"     => "已售1000+",
+					"abstracts" => "专业马桶疏通,最快30分钟上门"
+				],
+				[
+					"jump_url"  => "",
+					"img_url"   => "",
+					"title"     => "管道疏通",
+					"sales"     => "已售1000+",
+					"abstracts" => "快速上面,价格明透"
+				]
+			],
+			"footer_desc"	=>	'点击查看更多服务'
 		];
 		return json_encode($data);
+	}
+
+	public function getlatInfo() {
+		header("content-type:text/html;charset=utf-8");
+		$get_ip = $_SERVER['REMOTE_ADDR'];
+		$content = file_get_contents("http://api.map.baidu.com/location/ip?ak=Gi1nULBk8PY6PdBVyqnrT8Aguht5L639&ip={$get_ip}&coor=bd09ll");
+		$json = json_decode($content, true);
+		$lng = $json['content']['point']['x'];
+		$lat = $json['content']['point']['y'];
+		$city = $this->toAddressAmap($lng . ',' . $lat);
+		$citys = $city["addressComponent"]["city"];
+		return $citys;
+	}
+
+	public function toAddressAmap($location) {
+		$key = '454e53aea79c0b9e75e22b2c14704a44';
+		$url = "http://restapi.amap.com/v3/geocode/regeo?key=" . $key . "&location=" . $location . "&radius=1000&extensions=base&batch=false&roadlevel=0";
+		$result = $this->liuyang_curl_get_contents($url);
+		$result = json_decode($result, true);
+		if ($result['status'] == 1) {
+			return $result['regeocode'];
+		} else {
+			return $result['info'];
+		}
+	}
+
+
+	function liuyang_curl_get_contents($url) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		$r = curl_exec($ch);
+		curl_close($ch);
+		return $r;
 	}
 
 	/************************ 必须实现方法 *************************/

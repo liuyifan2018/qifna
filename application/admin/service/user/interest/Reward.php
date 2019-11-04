@@ -28,7 +28,7 @@ class Reward
 		$content = [
 			'type'	=>	0,
 			'title'	=>	'系统更新奖励',
-			'message'	=>	'因系统////月///日更新,停服对各位用户带来的不便,系统补偿50金币!'
+			'message'	=>	'因系统//月//日更新,停服对各位用户带来的不便,系统补偿50金币!'
 		];
 		SendMessage::sendMessage($userList,$content);
 		return true;

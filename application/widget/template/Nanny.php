@@ -23,12 +23,12 @@ class Nanny implements Template
 		$data = json_encode([
 			"err_code"  => 0,
 			"err_msg"   => "success",
-			"img_url"   => $this->image(),
-			"jump_url"  => $this->jumpUrl(),
-			"service_name"   => $this->serviceName(),
-			"type"      => $this->type(),
-			"skil_list" => $this->skilList(),
-			"price"     => $this->price(),
+			"img_url"   => "http://xrs.tupiancunchu.com/2019-10-22_5dae74634c86f.png",
+			"jump_url"  => "pages/service/serviceList/serviceList?id=22623",
+			"service_name"   => "保姆服务",
+			"type"      => ["月嫂", "保姆", "育儿嫂"],
+			"skil_list" => ["营养餐", "做饭", "早期教育"],
+			"price"     => "下单预约金 ￥5",
 			"license_list" => ["身份证", "营业执照"]
 		]);
 		return $data;

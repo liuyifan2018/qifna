@@ -38,6 +38,7 @@ class Base
 	 */
 	public function __construct(Cleaning $cleaning, Nanny $nanny, Dredge $dredge, Electric $electric, Repair $repair, Moving $moving) {
 		$this->classes = [$cleaning, $nanny, $dredge, $electric, $repair, $moving];
+
 	}
 
 	/**
