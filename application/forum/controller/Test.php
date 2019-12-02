@@ -28,8 +28,10 @@ class Test
 			$tempArr = json_decode($this->liuyang_curl_get_contents($getTokenApi), true);
 			$access_token = $tempArr['access_token'];
 			$api = "https://api.weixin.qq.com/wxa/setdynamicdata?access_token=" . $access_token;
-//			$keywords = ['保姆月嫂','育儿嫂','月嫂','保姆','保姆服务','保姆家政','钟点工'];
-			$keywords = ['管道疏通', '疏通管道', '下水道疏通', '疏通下水道', '疏通马桶', '马桶疏通', '通下水道'];
+//			$keywords = ['管道疏通', '疏通管道', '下水道疏通', '疏通下水道', '疏通马桶', '马桶疏通', '通下水道'];
+			$keywords = ["保洁开荒", "清洁", "办公室保洁", "保洁员", "清洗", "家庭保洁", "保洁服务",
+						 "保洁家政", "钟点工保洁", "找保洁", "日常保洁", "保洁工", '保姆月嫂', '育儿嫂', '月嫂', '保姆',
+						 "家居保洁", "家政清洁", "保洁清洁", "做清洁", "清洁保洁", '保姆服务', '保姆家政', '钟点工'];
 			for ($i = 0; $i < count($keywords); $i++) {
 				$over = $this->curl_post_contents($api, json_encode([
 					"data"     => json_encode([
@@ -45,34 +47,12 @@ class Test
 					]),
 					"lifespan" => 86400,
 					"query"    => json_encode([
-						"type" => 1000078
+						"type" => 1011045 //保姆保洁
 					]),
 					"scene"    => 1
 				]));
-				var_dump($over);
+				dump($over);
 			}
-//			$keywords = json_decode($this->liuyang_curl_get_contents('http://wy.51daoteng.com/phpexcel/import.php'));
-//			foreach ($keywords as $k => $v) {
-//				$over = $this->curl_post_contents($api, json_encode([
-//					"data"     => json_encode([
-//						"items"     => [[
-//											"keyword" => $v[0]
-//										]],
-//						"attribute" => [
-//							"count"      => count($keywords),
-//							"totalcount" => count($keywords),
-//							"id"         => $k,
-//							"seq"        => 0
-//						]
-//					]),
-//					"lifespan" => 86400,
-//					"query"    => json_encode([
-//						"type" => 1011045
-//					]),
-//					"scene"    => 1
-//				], JSON_UNESCAPED_UNICODE));
-//				var_dump($over);
-//			}
 		} else {
 			echo '密码错误!';
 		}
@@ -145,7 +125,7 @@ class Test
 		$this->skt(1, 2, 3, 4, 5);
 	}
 
-	public function skt() {
+	public function skt(...$args) {
 		$a = 2;
 		$b = 2;
 		$c = $a <=> $b;
@@ -172,7 +152,11 @@ class Test
 		}
 	}
 
-	public function ww(){
-		$a = Db::query('INSERT');
+	public function ww() {
+		$query = '{"type":11045,"slot_list":[{"key":"gps_city","value":"郑州市"},{"key":"gps_district","value":"金水区"},{"key":"gps_province","value":"河南省"},{"key":"keyword","value":"保姆"}],"search_id":"9040694797834325507"}';
+		$query = json_decode($query, true);
+		$query = $query["slot_list"];
+		$query = end($query);
+		dump($query["value"]);
 	}
 }

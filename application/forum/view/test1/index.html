@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="/Qifan/public/static/js/jquery.js"></script>
+    <title>Document</title>
+    <style>
+        .block {
+            margin: 240px auto;
+        }
+
+        .block input {
+            width: 300px;
+            height: 34px;
+            border: 1px solid #b5b5b5;
+            border-radius: 3px;
+        }
+
+        .buttonIn{
+            width: 70px;
+            height: 34px;
+            padding: 0 10px;
+            background: white;
+            border: 1px solid #2F8CFE;
+            border-radius: 3px;
+            color: #2F8CFE;
+        }
+
+        .active{
+            background: #2F8CFE;
+            color: white;
+        }
+
+    </style>
+    <script>
+        function getColor(defaultColor) {
+            let color = document.getElementById('color').value;
+            let body = document.getElementById('body');
+            if (typeof color != 'string' || color == null) {
+                color = defaultColor;
+            }
+            body.style.background = color;
+        }
+
+        //随便变色
+        function randColor() {
+            let colorArr = ['blue', 'white', 'yellow', 'black', 'green'];
+            let rand = Math.floor(Math.random() * colorArr.length);
+            console.log(rand);
+            console.log(colorArr[rand]);
+            let body = document.getElementById('body');
+            body.style.background = colorArr[rand];
+        }
+
+        $(function () {
+            $(document).keypress(function (e) {
+                if (e.keyCode == 13) {
+                    setTimeout(function () {
+                        document.getElementById('but').click();
+                    }, 500);
+                }
+            })
+        });
+    </script>
+</head>
+<body id="body">
+<div class="block">
+    <div>
+        <label>输入颜色</label>
+        <input type="text" id="color">
+        <button onclick="getColor('white')" id="but" class="buttonIn active">更新</button>
+        <button onclick="randColor()" class="buttonIn">随机色</button>
+    </div>
+</div>
+</body>
+</html>

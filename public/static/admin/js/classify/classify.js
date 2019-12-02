@@ -2,7 +2,7 @@ let classify = new Vue({
     el: '#classify',
     data: {},
     created: function () {
-
+        let date = Date;
     },
     methods: {
         classifyAdd: function () {

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {js href="/Qifan/public/static/my/js/utils/CURD.js" /}
+    {js href="/Qifan/public/static/my/js/utils/fetch.js" /}
+    {js href="/Qifan/public/static/my/js/library/jquery.js" /}
+    {js href="/Qifan/public/static/my/js/layer/layer.js" /}
+    {js href="/Qifan/public/static/my/js/library/vue.min.js" /}
+    {css href="/Qifan/public/static/my/css/index.css" /}
+</head>
+<body>
+<div class="header" id="qifan">
+    <label>
+        启凡的博客
+    </label>
+    <div class="tabBar">
+        <block v-for="tabBars in tabBar">
+            <a class="tab">{{tabBars.title}}</a>
+        </block>
+    </div>
+</div>
+<div class="body">
+    <iframe width="100%" height="100%" src=""></iframe>
+</div>
+</body>
+</html>
+{js href="/Qifan/public/static/my/js/index.js" /}
